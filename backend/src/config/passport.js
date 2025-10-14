@@ -4,10 +4,6 @@ import passport from "passport";
 import { Strategy as GoogleStrategy } from "passport-google-oauth20";
 import User from "../models/User.js";
 
-console.log("✅ GOOGLE_CLIENT_ID from env:", process.env.GOOGLE_CLIENT_ID);
-console.log("✅ GOOGLE_CLIENT_SECRET from env:", process.env.GOOGLE_CLIENT_SECRET);
-console.log("✅ GOOGLE_CALLBACK_URL from env:", process.env.GOOGLE_CALLBACK_URL);
-
 passport.use(
   new GoogleStrategy(
     {
@@ -19,15 +15,15 @@ passport.use(
       try {
         const email = profile.emails[0].value;
 
-        // 🔍 Check if user already exists
+        // 🔹 Check if user exists
         let user = await User.findOne({ email });
 
         if (!user) {
-          // ❌ No user found → redirect to frontend to sign up manually first
+          // First time Google login → force them to register locally
           return done(null, false, { message: "FIRST_TIME_USER" });
         }
 
-        // ✅ If the user exists, ensure googleId is set
+        // 🔸 Update googleId if missing
         if (!user.googleId) {
           user.googleId = profile.id;
           await user.save();
@@ -42,9 +38,8 @@ passport.use(
   )
 );
 
-
-// Session serialization
 passport.serializeUser((user, done) => done(null, user.id));
+
 passport.deserializeUser(async (id, done) => {
   try {
     const user = await User.findById(id);

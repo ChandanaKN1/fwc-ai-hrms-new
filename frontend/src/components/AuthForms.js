@@ -22,7 +22,7 @@ function AuthForms() {
     }
   }, [location]);
 
-  // Handle input change
+  // 📝 Handle input change
   const handleChange = (e) =>
     setFormData({ ...formData, [e.target.name]: e.target.value });
 
@@ -36,6 +36,9 @@ function AuthForms() {
       // 🧠 Store token & role in localStorage
       localStorage.setItem("token", data.token);
       localStorage.setItem("role", data.role);
+
+      // 🚀 Dispatch auth change so NavBar updates immediately
+      window.dispatchEvent(new Event("authChange"));
 
       alert(`${isLogin ? "Login" : "Signup"} successful!`);
 
@@ -95,7 +98,7 @@ function AuthForms() {
             <option value="Employee">Employee</option>
             <option value="HR">HR</option>
             <option value="Admin">Admin</option>
-            <option value="Candidate">Candidate</option> {/* ✅ Added Candidate */}
+            <option value="Candidate">Candidate</option>
           </select>
         )}
         <button style={styles.button} type="submit">

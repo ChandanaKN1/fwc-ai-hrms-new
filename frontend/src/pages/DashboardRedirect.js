@@ -20,7 +20,7 @@ export default function DashboardRedirect() {
           navigate("/employee");
           break;
         default:
-          navigate("/employee"); // fallback if role not recognized
+          navigate("/employee");
       }
     };
 
@@ -38,12 +38,11 @@ export default function DashboardRedirect() {
           return;
         }
 
-        // ✅ Then check local token & role
+        // ✅ Then check local token
         const token = localStorage.getItem("token");
         const role = localStorage.getItem("role");
-        console.log("🧠 Local Role:", role);
-
         if (token && role) {
+          console.log("🧠 Local Role:", role);
           redirectBasedOnRole(role);
           return;
         }

@@ -5,32 +5,42 @@ export default function NavBar() {
   const [loggedIn, setLoggedIn] = useState(false);
   const location = useLocation();
 
-  useEffect(() => {
-    // ✅ Check token for local logins
+  const checkLogin = () => {
     const token = localStorage.getItem("token");
     if (token) {
       setLoggedIn(true);
     } else {
-      // ✅ Check Google session for OAuth logins
       fetch("http://localhost:5000/api/auth/user", { credentials: "include" })
         .then((res) => {
           if (res.ok) setLoggedIn(true);
+          else setLoggedIn(false);
         })
         .catch(() => setLoggedIn(false));
     }
+  };
+
+  useEffect(() => {
+    checkLogin();
+
+    // ✅ Listen for login/logout in same tab
+    window.addEventListener("authChange", checkLogin);
+
+    return () => {
+      window.removeEventListener("authChange", checkLogin);
+    };
   }, []);
 
   const handleLogout = async () => {
-    // 🧹 Clear local storage
     localStorage.removeItem("token");
     localStorage.removeItem("role");
 
-    // 🧼 Clear Google session if present
     await fetch("http://localhost:5000/api/auth/logout", {
       credentials: "include",
     });
 
     setLoggedIn(false);
+    // 🔥 Trigger update for NavBar instantly
+    window.dispatchEvent(new Event("authChange"));
     window.location.href = "/";
   };
 

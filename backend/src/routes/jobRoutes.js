@@ -30,4 +30,4 @@ router.get("/", async (req, res) => {
   }
 });
 
-export default router;  // 👈 VERY IMPORTANT
+export default router;
