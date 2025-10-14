@@ -1,32 +1,29 @@
 import express from "express";
 import passport from "passport";
-import { registerUser, loginUser } from "../controllers/authController.js";
+import { registerUser, loginUser, verifyToken } from "../controllers/authController.js";
 
 const router = express.Router();
 
-// Normal login/register
 router.post("/register", registerUser);
 router.post("/login", loginUser);
+router.get("/verify-token", verifyToken);
 
 // Google OAuth
-router.get(
-  "/google",
-  passport.authenticate("google", { scope: ["profile", "email"] })
-);
+router.get("/google", passport.authenticate("google", { scope: ["profile", "email"] }));
 
 router.get(
   "/google/callback",
-  passport.authenticate("google", {
-    failureRedirect: "http://localhost:3000",
-    session: true,
-  }),
+  passport.authenticate("google", { failureRedirect: "http://localhost:3000" }),
   (req, res) => {
-    // You can create a JWT or just use req.user here
-    const token = "GENERATE_YOUR_JWT_TOKEN"; // or use your existing token function
     const role = req.user.role;
-
-    res.redirect(`http://localhost:3000/dashboard?token=${token}&role=${role}`);
+    const token = "OAUTH_SESSION_TOKEN";
+    res.redirect(`http://localhost:3000/dashboard?role=${role}&token=${token}`);
   }
 );
+
+router.get("/user", (req, res) => {
+  if (req.isAuthenticated()) return res.json(req.user);
+  res.status(401).json({ message: "Unauthorized" });
+});
 
 export default router;

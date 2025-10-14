@@ -5,4 +5,16 @@ const API = axios.create({
   withCredentials: true,
 });
 
+// Jobs
+export const createJob = (jobData) => {
+  const token = localStorage.getItem("token");
+  return API.post("/jobs", jobData, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+};
+
+export const getAllJobs = () => API.get("/jobs");
+
 export default API;

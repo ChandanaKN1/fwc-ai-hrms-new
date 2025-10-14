@@ -1,10 +1,9 @@
-// backend/src/controllers/authController.js
 import User from "../models/User.js";
 import jwt from "jsonwebtoken";
 
 const generateToken = (id) => jwt.sign({ id }, process.env.JWT_SECRET, { expiresIn: "7d" });
 
-// 🟩 Register User
+// 🟢 Register
 export const registerUser = async (req, res) => {
   try {
     const { name, email, password, role } = req.body;
@@ -16,51 +15,64 @@ export const registerUser = async (req, res) => {
 
     res.status(201).json({
       message: "User registered successfully",
-      _id: user._id,
+      token,
+      role: user.role,
       name: user.name,
       email: user.email,
-      role: user.role,
-      token,
     });
   } catch (error) {
     res.status(500).json({ message: "Registration failed", error: error.message });
   }
 };
 
-// 🟩 Login User
+// 🟢 Login
 export const loginUser = async (req, res) => {
   try {
     const { email, password } = req.body;
     const user = await User.findOne({ email });
-
-    if (!user || !(await user.matchPassword(password))) {
+    if (!user || !(await user.matchPassword(password)))
       return res.status(401).json({ message: "Invalid credentials" });
-    }
 
     const token = generateToken(user._id);
+
     res.status(200).json({
       message: "Login successful",
-      _id: user._id,
+      token,
+      role: user.role,
       name: user.name,
       email: user.email,
-      role: user.role,
-      token,
     });
   } catch (error) {
     res.status(500).json({ message: "Login failed", error: error.message });
   }
 };
 
-// 🟩 Google Auth Success (called from callback)
+// 🟢 Verify token for local login
+export const verifyToken = async (req, res) => {
+  try {
+    const authHeader = req.headers.authorization;
+    if (!authHeader) return res.status(401).json({ message: "No token" });
+
+    const token = authHeader.split(" ")[1];
+    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+    const user = await User.findById(decoded.id).select("-password");
+    if (!user) return res.status(404).json({ message: "User not found" });
+
+    res.json({ user });
+  } catch (err) {
+    res.status(401).json({ message: "Invalid token" });
+  }
+};
+
+// 🟢 Google Auth Success
 export const googleAuthSuccess = (req, res) => {
   if (!req.user) return res.status(400).json({ message: "No user data" });
-
   const token = generateToken(req.user._id);
   res.status(200).json({
     message: "Google login successful",
+    token,
+    role: req.user.role,
     name: req.user.name,
     email: req.user.email,
-    role: req.user.role,
-    token,
   });
 };

@@ -1,26 +1,34 @@
 import React from "react";
 
-const DashboardCard = ({ title, description, buttonText, onClick, color }) => {
+export default function DashboardCard({
+  title,
+  description,
+  buttonText,
+  color = "blue",
+  onClick,
+}) {
+  const btn = {
+    yellow: "bg-yellow-500 hover:bg-yellow-600",
+    blue: "bg-blue-500 hover:bg-blue-600",
+    green: "bg-green-500 hover:bg-green-600",
+    gray: "bg-gray-500 hover:bg-gray-600",
+  }[color];
+
   return (
-    <div className="bg-gray-800 text-white rounded-lg p-6 shadow-lg w-64">
-      <h3 className="text-lg font-semibold mb-2">{title}</h3>
-      <p className="text-gray-400 mb-4">{description}</p>
+    <div className="bg-gray-800 rounded-xl p-5 shadow-md h-full min-h-[220px] flex flex-col justify-between">
+      {/* Top Section */}
+      <div className="flex-1">
+        <h2 className="text-lg font-semibold mb-2">{title}</h2>
+        <p className="text-sm text-gray-300">{description}</p>
+      </div>
+
+      {/* Bottom Button */}
       <button
         onClick={onClick}
-        className={`px-4 py-2 rounded ${
-          color === "blue"
-            ? "bg-blue-500 hover:bg-blue-600"
-            : color === "green"
-            ? "bg-green-500 hover:bg-green-600"
-            : color === "yellow"
-            ? "bg-yellow-500 hover:bg-yellow-600"
-            : "bg-gray-600 hover:bg-gray-700"
-        }`}
+        className={`mt-4 w-full px-4 py-2 rounded font-medium text-white text-center ${btn}`}
       >
         {buttonText}
       </button>
     </div>
   );
-};
-
-export default DashboardCard;
+}

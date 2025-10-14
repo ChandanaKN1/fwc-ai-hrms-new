@@ -1,10 +1,10 @@
-// src/components/AuthForms.js
-import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import React, { useState, useEffect } from "react";
+import { useNavigate, useLocation } from "react-router-dom";
 import API from "../api/api";
 
 function AuthForms() {
   const navigate = useNavigate();
+  const location = useLocation();
   const [isLogin, setIsLogin] = useState(false);
   const [formData, setFormData] = useState({
     name: "",
@@ -13,32 +13,41 @@ function AuthForms() {
     role: "Employee",
   });
 
+  // ✅ Show message if redirected from first-time Google OAuth
+  useEffect(() => {
+    const params = new URLSearchParams(location.search);
+    const firstTime = params.get("firstTime");
+    if (firstTime) {
+      alert("👉 Please sign up using email and password for the first time.");
+    }
+  }, [location]);
+
+  // Handle input change
   const handleChange = (e) =>
     setFormData({ ...formData, [e.target.name]: e.target.value });
 
+  // 🧠 Local Register/Login handler
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
       const endpoint = isLogin ? "/auth/login" : "/auth/register";
       const { data } = await API.post(endpoint, formData);
 
-      // 🧠 Store token & role for later use
+      // 🧠 Store token & role in localStorage
       localStorage.setItem("token", data.token);
       localStorage.setItem("role", data.role);
 
       alert(`${isLogin ? "Login" : "Signup"} successful!`);
 
-      // 🧭 Redirect based on role
-      if (data.role === "Admin") navigate("/admin");
-      else if (data.role === "HR") navigate("/hr");
-      else navigate("/employee");
-
+      // ✅ Redirect to dashboard and let DashboardRedirect handle role routing
+      navigate("/dashboard");
     } catch (err) {
       console.error("❌ Auth error:", err);
       alert(err.response?.data?.message || "Something went wrong!");
     }
   };
 
+  // 🌐 Google Login handler
   const handleGoogleLogin = () => {
     window.location.href = "http://localhost:5000/api/auth/google";
   };
@@ -86,6 +95,7 @@ function AuthForms() {
             <option value="Employee">Employee</option>
             <option value="HR">HR</option>
             <option value="Admin">Admin</option>
+            <option value="Candidate">Candidate</option> {/* ✅ Added Candidate */}
           </select>
         )}
         <button style={styles.button} type="submit">
@@ -98,7 +108,9 @@ function AuthForms() {
       </button>
 
       <p style={styles.switchText} onClick={() => setIsLogin(!isLogin)}>
-        {isLogin ? "New user? Register here" : "Already have an account? Login here"}
+        {isLogin
+          ? "New user? Register here"
+          : "Already have an account? Login here"}
       </p>
     </div>
   );
@@ -107,9 +119,27 @@ function AuthForms() {
 const styles = {
   container: { textAlign: "center", marginTop: "50px" },
   form: { display: "inline-block", textAlign: "left", marginTop: "20px" },
-  input: { display: "block", margin: "10px 0", padding: "8px 12px", width: "250px" },
-  button: { padding: "10px 20px", marginTop: "10px", backgroundColor: "#61dafb", border: "none", cursor: "pointer" },
-  googleButton: { backgroundColor: "#DB4437", color: "white", border: "none", padding: "10px 20px", cursor: "pointer", marginTop: "15px" },
+  input: {
+    display: "block",
+    margin: "10px 0",
+    padding: "8px 12px",
+    width: "250px",
+  },
+  button: {
+    padding: "10px 20px",
+    marginTop: "10px",
+    backgroundColor: "#61dafb",
+    border: "none",
+    cursor: "pointer",
+  },
+  googleButton: {
+    backgroundColor: "#DB4437",
+    color: "white",
+    border: "none",
+    padding: "10px 20px",
+    cursor: "pointer",
+    marginTop: "15px",
+  },
   switchText: { color: "blue", marginTop: "20px", cursor: "pointer" },
   title: { color: "#282c34" },
 };

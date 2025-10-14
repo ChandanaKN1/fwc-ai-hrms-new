@@ -17,27 +17,41 @@ passport.use(
     },
     async (accessToken, refreshToken, profile, done) => {
       try {
-        let user = await User.findOne({ googleId: profile.id });
+        const email = profile.emails[0].value;
+
+        // 🔍 Check if user already exists
+        let user = await User.findOne({ email });
+
         if (!user) {
-          user = await User.create({
-            name: profile.displayName,
-            email: profile.emails[0].value,
-            googleId: profile.id,
-            role: "Employee", // default
-          });
+          // ❌ No user found → redirect to frontend to sign up manually first
+          return done(null, false, { message: "FIRST_TIME_USER" });
         }
+
+        // ✅ If the user exists, ensure googleId is set
+        if (!user.googleId) {
+          user.googleId = profile.id;
+          await user.save();
+        }
+
         return done(null, user);
       } catch (err) {
-        done(err, null);
+        console.error("❌ Google Auth Error:", err);
+        return done(err, null);
       }
     }
   )
 );
 
+
+// Session serialization
 passport.serializeUser((user, done) => done(null, user.id));
 passport.deserializeUser(async (id, done) => {
-  const user = await User.findById(id);
-  done(null, user);
+  try {
+    const user = await User.findById(id);
+    done(null, user);
+  } catch (err) {
+    done(err, null);
+  }
 });
 
 export default passport;
