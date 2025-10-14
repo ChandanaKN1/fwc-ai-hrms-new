@@ -1,10 +1,12 @@
 import React, { useState } from "react";
 import DashboardCard from "../components/DashboardCard";
 import { createJob } from "../api/api";
+import { useNavigate } from "react-router-dom";
 
 export default function HRDashboard() {
   const [showModal, setShowModal] = useState(false);
   const [jobData, setJobData] = useState({ title: "", description: "", location: "" });
+  const navigate = useNavigate();
 
   const features = [
     {
@@ -25,6 +27,13 @@ export default function HRDashboard() {
       description: "Schedule/manage interviews.",
       buttonText: "Open Interviews",
       color: "green",
+    },
+    {
+      title: "View Applications",
+      description: "View & download resumes of applied candidates.",
+      buttonText: "View Applications",
+      color: "gray",
+      onClick: () => navigate("/hr/applications"),
     },
   ];
 

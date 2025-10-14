@@ -1,4 +1,3 @@
-// frontend/src/components/ProtectedRoute.js
 import React, { useEffect, useState } from "react";
 import { Navigate } from "react-router-dom";
 
@@ -8,7 +7,7 @@ export default function ProtectedRoute({ children }) {
   useEffect(() => {
     const checkAuth = async () => {
       try {
-        // 🟢 1. Check Google session
+        // 1️⃣ Check Google session
         const sessionRes = await fetch("http://localhost:5000/api/auth/user", {
           credentials: "include",
         });
@@ -18,7 +17,7 @@ export default function ProtectedRoute({ children }) {
           return;
         }
 
-        // 🟡 2. Check local JWT token
+        // 2️⃣ Check local token
         const token = localStorage.getItem("token");
         if (token) {
           const verifyRes = await fetch("http://localhost:5000/api/auth/verify-token", {
@@ -28,12 +27,15 @@ export default function ProtectedRoute({ children }) {
           });
 
           if (verifyRes.ok) {
+            const data = await verifyRes.json();
+            // 🆕 Re-store user to keep role synced after restart
+            localStorage.setItem("user", JSON.stringify(data.user));
+            localStorage.setItem("role", data.user.role);
             setIsAuth(true);
             return;
           }
         }
 
-        // 🚫 3. If neither session nor token is valid
         setIsAuth(false);
       } catch (err) {
         console.error("ProtectedRoute error:", err);
@@ -45,7 +47,7 @@ export default function ProtectedRoute({ children }) {
   }, []);
 
   if (isAuth === null) {
-    return <p>🔒 Checking authentication...</p>; // small loader while checking
+    return <p>🔒 Checking authentication...</p>;
   }
 
   if (!isAuth) {

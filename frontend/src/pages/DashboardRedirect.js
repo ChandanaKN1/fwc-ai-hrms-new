@@ -26,11 +26,10 @@ export default function DashboardRedirect() {
 
     const checkUser = async () => {
       try {
-        // ✅ First check Google session
+        // 1️⃣ Check Google session
         const res = await fetch("http://localhost:5000/api/auth/user", {
           credentials: "include",
         });
-
         if (res.ok) {
           const user = await res.json();
           console.log("🌐 Google Session Role:", user.role);
@@ -38,7 +37,18 @@ export default function DashboardRedirect() {
           return;
         }
 
-        // ✅ Then check local token
+        // 2️⃣ Check stored user
+        const storedUser = localStorage.getItem("user");
+        if (storedUser) {
+          const parsedUser = JSON.parse(storedUser);
+          if (parsedUser?.role) {
+            console.log("🧠 Stored User Role:", parsedUser.role);
+            redirectBasedOnRole(parsedUser.role);
+            return;
+          }
+        }
+
+        // 3️⃣ Check token and role separately
         const token = localStorage.getItem("token");
         const role = localStorage.getItem("role");
         if (token && role) {

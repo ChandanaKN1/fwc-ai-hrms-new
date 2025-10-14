@@ -6,6 +6,8 @@ import cors from "cors";
 import cookieParser from "cookie-parser";
 import session from "express-session";
 import passport from "passport";
+import path from "path";
+import { fileURLToPath } from "url";
 import "./config/passport.js";
 
 import authRoutes from "./routes/authRoutes.js";
@@ -13,7 +15,13 @@ import jobRoutes from "./routes/jobRoutes.js";
 
 const app = express();
 
-// ✅ CORS
+// 🧭 Fix for __dirname in ES Modules
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
+/* --------------------------------------------------
+   ✅ 1. CORS
+--------------------------------------------------- */
 app.use(
   cors({
     origin: process.env.CLIENT_URL || "http://localhost:3000",
@@ -21,11 +29,15 @@ app.use(
   })
 );
 
-// ✅ Middleware
+/* --------------------------------------------------
+   ✅ 2. Middleware
+--------------------------------------------------- */
 app.use(express.json());
 app.use(cookieParser());
 
-// ✅ Session
+/* --------------------------------------------------
+   ✅ 3. Session
+--------------------------------------------------- */
 app.use(
   session({
     secret: process.env.SESSION_SECRET || "mysecret",
@@ -34,27 +46,46 @@ app.use(
     cookie: {
       httpOnly: true,
       secure: false,
-      maxAge: 1000 * 60 * 60 * 24,
+      maxAge: 1000 * 60 * 60 * 24, // 1 day
     },
   })
 );
 
-// ✅ Passport
+/* --------------------------------------------------
+   ✅ 4. Passport
+--------------------------------------------------- */
 app.use(passport.initialize());
 app.use(passport.session());
 
-// ✅ Routes
+/* --------------------------------------------------
+   ✅ 5. Static folder for resumes (uploads)
+--------------------------------------------------- */
+app.use("/uploads", express.static(path.join(__dirname, "../uploads")));
+
+/* --------------------------------------------------
+   ✅ 6. Routes
+--------------------------------------------------- */
 app.use("/api/auth", authRoutes);
 app.use("/api/jobs", jobRoutes);
 
-// ✅ Debug: Check session user
+/* --------------------------------------------------
+   ✅ 7. Debug route — check session user
+--------------------------------------------------- */
 app.get("/api/auth/user", (req, res) => {
   if (req.user) return res.json(req.user);
   res.status(401).json({ message: "Not logged in" });
 });
 
-app.get("/", (req, res) => res.send("🚀 HRMS Backend running successfully!"));
+/* --------------------------------------------------
+   ✅ 8. Health check
+--------------------------------------------------- */
+app.get("/", (req, res) => {
+  res.send("🚀 HRMS Backend running successfully!");
+});
 
+/* --------------------------------------------------
+   ✅ 9. Start server
+--------------------------------------------------- */
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => console.log(`✅ Server running on port ${PORT}`));
 

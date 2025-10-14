@@ -15,6 +15,15 @@ export const createJob = (jobData) => {
   });
 };
 
+export const getJobApplications = (jobId) => {
+  const token = localStorage.getItem("token");
+  return API.get(`/jobs/${jobId}/applications`, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+};
+
 export const getAllJobs = () => API.get("/jobs");
 
 export default API;

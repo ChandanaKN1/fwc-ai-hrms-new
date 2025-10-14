@@ -29,20 +29,21 @@ function AuthForms() {
   // 🧠 Local Register/Login handler
   const handleSubmit = async (e) => {
     e.preventDefault();
+    console.log("🚀 Sending data to backend:", formData);
+
     try {
       const endpoint = isLogin ? "/auth/login" : "/auth/register";
       const { data } = await API.post(endpoint, formData);
 
-      // 🧠 Store token & role in localStorage
+      // 🧠 Store token & role & user
       localStorage.setItem("token", data.token);
       localStorage.setItem("role", data.role);
+      localStorage.setItem("user", JSON.stringify(data));
 
       // 🚀 Dispatch auth change so NavBar updates immediately
       window.dispatchEvent(new Event("authChange"));
 
       alert(`${isLogin ? "Login" : "Signup"} successful!`);
-
-      // ✅ Redirect to dashboard and let DashboardRedirect handle role routing
       navigate("/dashboard");
     } catch (err) {
       console.error("❌ Auth error:", err);
@@ -94,6 +95,7 @@ function AuthForms() {
             name="role"
             value={formData.role}
             onChange={handleChange}
+            required
           >
             <option value="Employee">Employee</option>
             <option value="HR">HR</option>

@@ -11,14 +11,23 @@ import HRDashboard from "./pages/HRDashboard";
 import EmployeeDashboard from "./pages/EmployeeDashboard";
 import CandidateDashboard from "./pages/CandidateDashboard";
 
+// 🆕 Import the new page
+import ViewApplications from "./pages/ViewApplications";
+
 export default function App() {
   return (
     <Router>
-      <NavBar />  {/* ✅ should be here */}
+      {/* ✅ NavBar at the top for all pages */}
+      <NavBar />
+
       <Routes>
+        {/* Login / Signup */}
         <Route path="/" element={<AuthForms />} />
+
+        {/* Common redirect after login */}
         <Route path="/dashboard" element={<DashboardRedirect />} />
 
+        {/* Admin */}
         <Route
           path="/admin"
           element={
@@ -27,6 +36,8 @@ export default function App() {
             </ProtectedRoute>
           }
         />
+
+        {/* HR */}
         <Route
           path="/hr"
           element={
@@ -35,6 +46,18 @@ export default function App() {
             </ProtectedRoute>
           }
         />
+
+        {/* 🆕 HR - View Applications */}
+        <Route
+          path="/hr/applications"
+          element={
+            <ProtectedRoute>
+              <ViewApplications />
+            </ProtectedRoute>
+          }
+        />
+
+        {/* Employee */}
         <Route
           path="/employee"
           element={
@@ -43,6 +66,8 @@ export default function App() {
             </ProtectedRoute>
           }
         />
+
+        {/* Candidate */}
         <Route
           path="/candidate"
           element={
