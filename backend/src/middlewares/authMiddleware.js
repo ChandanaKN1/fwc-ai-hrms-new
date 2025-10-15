@@ -1,6 +1,7 @@
 import jwt from "jsonwebtoken";
 import User from "../models/User.js";
 
+/* ✅ Verify JWT and attach user to req */
 export const protect = async (req, res, next) => {
   let token = null;
 
@@ -8,18 +9,22 @@ export const protect = async (req, res, next) => {
     token = req.headers.authorization.split(" ")[1];
   }
 
-  if (!token) return res.status(401).json({ message: "Not authorized" });
+  if (!token) return res.status(401).json({ message: "Not authorized, no token" });
 
   try {
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
     req.user = await User.findById(decoded.id).select("-password");
+
+    if (!req.user) return res.status(401).json({ message: "User not found" });
+
     next();
   } catch (error) {
-    console.error(error);
+    console.error("JWT verification error:", error);
     res.status(401).json({ message: "Token failed" });
   }
 };
 
+/* ✅ Check allowed roles */
 export const authorizeRoles = (...roles) => {
   return (req, res, next) => {
     if (!roles.includes(req.user.role)) {

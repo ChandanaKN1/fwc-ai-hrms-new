@@ -21,12 +21,14 @@ export default function HRDashboard() {
       description: "Upload resumes, view AI ranked candidates.",
       buttonText: "Open AI Screening",
       color: "yellow",
+      onClick: () => alert("🚧 Feature coming soon"),
     },
     {
       title: "Interviews",
       description: "Schedule/manage interviews.",
       buttonText: "Open Interviews",
       color: "green",
+      onClick: () => alert("🚧 Feature coming soon"),
     },
     {
       title: "View Applications",
@@ -34,6 +36,27 @@ export default function HRDashboard() {
       buttonText: "View Applications",
       color: "gray",
       onClick: () => navigate("/hr/applications"),
+    },
+    {
+      title: "Attendance",
+      description: "View and manage employee attendance records.",
+      buttonText: "Manage Attendance",
+      color: "green",
+      onClick: () => navigate("/hr/attendance"),
+    },
+    {
+      title: "Leave Requests",
+      description: "Approve or reject employee leave requests.",
+      buttonText: "Manage Leave",
+      color: "blue",
+      onClick: () => navigate("/hr/leave"),
+    },
+    {
+      title: "Payroll",
+      description: "Manage salary and generate employee payroll.",
+      buttonText: "Manage Payroll",
+      color: "yellow",
+      onClick: () => navigate("/hr/payroll"),
     },
   ];
 
@@ -88,10 +111,17 @@ export default function HRDashboard() {
                 className="w-full mb-3 p-2 border"
               />
               <div className="flex justify-end gap-2">
-                <button type="button" onClick={() => setShowModal(false)} className="bg-gray-500 text-white px-3 py-1 rounded">
+                <button
+                  type="button"
+                  onClick={() => setShowModal(false)}
+                  className="bg-gray-500 text-white px-3 py-1 rounded"
+                >
                   Cancel
                 </button>
-                <button type="submit" className="bg-blue-600 text-white px-3 py-1 rounded">
+                <button
+                  type="submit"
+                  className="bg-blue-600 text-white px-3 py-1 rounded"
+                >
                   Add
                 </button>
               </div>

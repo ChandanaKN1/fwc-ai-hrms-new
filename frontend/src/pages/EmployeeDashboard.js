@@ -1,10 +1,12 @@
 import React from "react";
 import DashboardCard from "../components/DashboardCard";
+import { useNavigate } from "react-router-dom";
 
 export default function EmployeeDashboard() {
+  const navigate = useNavigate();
   const features = [
     { title: "Projects", description: "View, manage, and collaborate on assigned projects.", buttonText: "Open Projects", color: "yellow" },
-    { title: "Attendance", description: "Mark attendance and request leave.", buttonText: "Open Attendance", color: "blue" },
+    { title: "Attendance", description: "Mark attendance and request leave.", buttonText: "Open Attendance", color: "blue", onClick: () => navigate("/employee/attendance") },
     { title: "Payroll", description: "View payslips and salary details.", buttonText: "Open Payroll", color: "gray" },
     { title: "Chatbot", description: "Ask FAQs about status, leave, payroll.", buttonText: "Open Chatbot", color: "green" },
   ];

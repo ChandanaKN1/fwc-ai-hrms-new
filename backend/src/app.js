@@ -10,17 +10,21 @@ import path from "path";
 import { fileURLToPath } from "url";
 import "./config/passport.js";
 
+// 🛠️ Import Routes
 import authRoutes from "./routes/authRoutes.js";
 import jobRoutes from "./routes/jobRoutes.js";
+import hrRoutes from "./routes/hrRoutes.js";
+import employeeRoutes from "./routes/employeeRoutes.js"; // ✅ Employee routes
+import { protect } from "./middlewares/authMiddleware.js"; // ✅ Import protect middleware
 
 const app = express();
 
-// 🧭 Fix for __dirname in ES Modules
+// ✅ Fix for __dirname in ES Modules
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 /* --------------------------------------------------
-   ✅ 1. CORS
+   1. 🌐 CORS Configuration
 --------------------------------------------------- */
 app.use(
   cors({
@@ -30,13 +34,13 @@ app.use(
 );
 
 /* --------------------------------------------------
-   ✅ 2. Middleware
+   2. 🧰 Basic Middleware
 --------------------------------------------------- */
 app.use(express.json());
 app.use(cookieParser());
 
 /* --------------------------------------------------
-   ✅ 3. Session
+   3. 🔐 Session Handling (For Google OAuth session support)
 --------------------------------------------------- */
 app.use(
   session({
@@ -45,46 +49,47 @@ app.use(
     saveUninitialized: false,
     cookie: {
       httpOnly: true,
-      secure: false,
+      secure: false, // ✅ Set to true if using HTTPS in production
       maxAge: 1000 * 60 * 60 * 24, // 1 day
     },
   })
 );
 
 /* --------------------------------------------------
-   ✅ 4. Passport
+   4. 🪪 Passport Authentication
 --------------------------------------------------- */
 app.use(passport.initialize());
 app.use(passport.session());
 
 /* --------------------------------------------------
-   ✅ 5. Static folder for resumes (uploads)
+   5. 🗂️ Static Files (Resumes Upload Folder)
 --------------------------------------------------- */
 app.use("/uploads", express.static(path.join(__dirname, "../uploads")));
 
 /* --------------------------------------------------
-   ✅ 6. Routes
+   6. 🧭 API Routes
 --------------------------------------------------- */
 app.use("/api/auth", authRoutes);
 app.use("/api/jobs", jobRoutes);
+app.use("/api/hr", hrRoutes);
+app.use("/api/employee", employeeRoutes); // ✅ Employee attendance route
 
 /* --------------------------------------------------
-   ✅ 7. Debug route — check session user
+   7. 🧪 Debug Route — Check Current Logged-in User (Now uses JWT)
 --------------------------------------------------- */
-app.get("/api/auth/user", (req, res) => {
-  if (req.user) return res.json(req.user);
-  res.status(401).json({ message: "Not logged in" });
+app.get("/api/auth/user", protect, (req, res) => {
+  res.json(req.user);
 });
 
 /* --------------------------------------------------
-   ✅ 8. Health check
+   8. ❤️ Health Check Route
 --------------------------------------------------- */
 app.get("/", (req, res) => {
   res.send("🚀 HRMS Backend running successfully!");
 });
 
 /* --------------------------------------------------
-   ✅ 9. Start server
+   9. 🚀 Start Server
 --------------------------------------------------- */
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => console.log(`✅ Server running on port ${PORT}`));

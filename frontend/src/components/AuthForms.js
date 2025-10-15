@@ -35,7 +35,10 @@ function AuthForms() {
       const endpoint = isLogin ? "/auth/login" : "/auth/register";
       const { data } = await API.post(endpoint, formData);
 
-      // 🧠 Store token & role & user
+      // ✅ Clear any old login data before setting new
+      localStorage.clear();
+
+      // 🧠 Store fresh token & role & user
       localStorage.setItem("token", data.token);
       localStorage.setItem("role", data.role);
       localStorage.setItem("user", JSON.stringify(data));
@@ -53,6 +56,7 @@ function AuthForms() {
 
   // 🌐 Google Login handler
   const handleGoogleLogin = () => {
+    // This will redirect to backend which will eventually redirect back with token + role
     window.location.href = "http://localhost:5000/api/auth/google";
   };
 

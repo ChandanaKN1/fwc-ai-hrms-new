@@ -10,24 +10,19 @@ import AdminDashboard from "./pages/AdminDashboard";
 import HRDashboard from "./pages/HRDashboard";
 import EmployeeDashboard from "./pages/EmployeeDashboard";
 import CandidateDashboard from "./pages/CandidateDashboard";
-
-// 🆕 Import the new page
 import ViewApplications from "./pages/ViewApplications";
+
+import EmployeeAttendancePage from "./pages/EmployeeAttendancePage";
+import HRAttendancePage from "./pages/HRAttendancePage";
 
 export default function App() {
   return (
     <Router>
-      {/* ✅ NavBar at the top for all pages */}
       <NavBar />
-
       <Routes>
-        {/* Login / Signup */}
         <Route path="/" element={<AuthForms />} />
-
-        {/* Common redirect after login */}
         <Route path="/dashboard" element={<DashboardRedirect />} />
 
-        {/* Admin */}
         <Route
           path="/admin"
           element={
@@ -37,7 +32,6 @@ export default function App() {
           }
         />
 
-        {/* HR */}
         <Route
           path="/hr"
           element={
@@ -46,8 +40,6 @@ export default function App() {
             </ProtectedRoute>
           }
         />
-
-        {/* 🆕 HR - View Applications */}
         <Route
           path="/hr/applications"
           element={
@@ -56,8 +48,15 @@ export default function App() {
             </ProtectedRoute>
           }
         />
+        <Route
+          path="/hr/attendance"
+          element={
+            <ProtectedRoute>
+              <HRAttendancePage />
+            </ProtectedRoute>
+          }
+        />
 
-        {/* Employee */}
         <Route
           path="/employee"
           element={
@@ -66,8 +65,15 @@ export default function App() {
             </ProtectedRoute>
           }
         />
+        <Route
+          path="/employee/attendance"
+          element={
+            <ProtectedRoute>
+              <EmployeeAttendancePage />
+            </ProtectedRoute>
+          }
+        />
 
-        {/* Candidate */}
         <Route
           path="/candidate"
           element={

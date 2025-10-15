@@ -5,67 +5,50 @@ export default function DashboardRedirect() {
   const navigate = useNavigate();
 
   useEffect(() => {
-    const redirectBasedOnRole = (role) => {
-      switch (role) {
-        case "Admin":
-          navigate("/admin");
-          break;
-        case "HR":
-          navigate("/hr");
-          break;
-        case "Candidate":
-          navigate("/candidate");
-          break;
-        case "Employee":
-          navigate("/employee");
-          break;
-        default:
-          navigate("/employee");
+    const params = new URLSearchParams(window.location.search);
+    const tokenFromURL = params.get("token");
+    const roleFromURL = params.get("role");
+
+    if (tokenFromURL) {
+      // ✅ Clear old data
+      localStorage.clear();
+
+      // ✅ Store new token & role from URL (if provided)
+      localStorage.setItem("token", tokenFromURL);
+      if (roleFromURL) {
+        localStorage.setItem("role", roleFromURL);
       }
-    };
 
-    const checkUser = async () => {
-      try {
-        // 1️⃣ Check Google session
-        const res = await fetch("http://localhost:5000/api/auth/user", {
-          credentials: "include",
-        });
-        if (res.ok) {
-          const user = await res.json();
-          console.log("🌐 Google Session Role:", user.role);
-          redirectBasedOnRole(user.role);
-          return;
-        }
+      // Remove ?token=... from URL
+      window.history.replaceState({}, document.title, "/dashboard");
+    }
 
-        // 2️⃣ Check stored user
-        const storedUser = localStorage.getItem("user");
-        if (storedUser) {
-          const parsedUser = JSON.parse(storedUser);
-          if (parsedUser?.role) {
-            console.log("🧠 Stored User Role:", parsedUser.role);
-            redirectBasedOnRole(parsedUser.role);
-            return;
-          }
-        }
+    const token = localStorage.getItem("token");
+    if (!token) {
+      navigate("/");
+      return;
+    }
 
-        // 3️⃣ Check token and role separately
-        const token = localStorage.getItem("token");
-        const role = localStorage.getItem("role");
-        if (token && role) {
-          console.log("🧠 Local Role:", role);
-          redirectBasedOnRole(role);
-          return;
-        }
+    const role = localStorage.getItem("role");
 
+    switch (role) {
+      case "HR":
+        navigate("/hr");
+        break;
+      case "Employee":
+        navigate("/employee");
+        break;
+      case "Admin":
+        navigate("/admin");
+        break;
+      case "Candidate":
+        navigate("/candidate");
+        break;
+      default:
         navigate("/");
-      } catch (error) {
-        console.error("🚨 Redirect error:", error);
-        navigate("/");
-      }
-    };
-
-    checkUser();
+        break;
+    }
   }, [navigate]);
 
-  return <p>Redirecting...</p>;
+  return null;
 }
