@@ -5,6 +5,7 @@ import NavBar from "./components/NavBar";
 import AuthForms from "./components/AuthForms";
 import DashboardRedirect from "./pages/DashboardRedirect";
 import ProtectedRoute from "./components/ProtectedRoute";
+import { ChatbotProvider } from "./context/ChatbotContext";
 
 // Dashboards
 import AdminDashboard from "./pages/AdminDashboard";
@@ -28,8 +29,9 @@ import HRLeaveRequestsPage from "./pages/HRLeaveRequestsPage";  // ✅ newly add
 export default function App() {
   return (
     <Router>
-      <NavBar />
-      <Routes>
+      <ChatbotProvider>
+        <NavBar />
+        <Routes>
         {/* ==============================
            AUTHENTICATION
         ============================== */}
@@ -162,6 +164,7 @@ export default function App() {
           }
         />
       </Routes>
+      </ChatbotProvider>
     </Router>
   );
 }

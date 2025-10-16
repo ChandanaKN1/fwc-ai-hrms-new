@@ -15,6 +15,7 @@ import authRoutes from "./routes/authRoutes.js";
 import jobRoutes from "./routes/jobRoutes.js";
 import hrRoutes from "./routes/hrRoutes.js";
 import employeeRoutes from "./routes/employeeRoutes.js"; // ✅ Employee routes
+import chatbotRoutes from "./routes/chatbotRoutes.js"; // ✅ Chatbot routes
 import { protect } from "./middlewares/authMiddleware.js"; // ✅ Import protect middleware
 
 const app = express();
@@ -73,6 +74,7 @@ app.use("/api/auth", authRoutes);
 app.use("/api/jobs", jobRoutes);
 app.use("/api/hr", hrRoutes);
 app.use("/api/employee", employeeRoutes); // ✅ Employee attendance route
+app.use("/api/chatbot", chatbotRoutes); // ✅ Chatbot route
 
 /* --------------------------------------------------
    7. 🧪 Debug Route — Check Current Logged-in User (Now uses JWT)
