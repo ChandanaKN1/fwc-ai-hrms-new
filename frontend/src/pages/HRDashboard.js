@@ -9,16 +9,18 @@ export default function HRDashboard() {
   const navigate = useNavigate();
 
   const features = [
-    { title: "Jobs", description: "Post openings and track applications.", buttonText: "Manage Jobs", color: "blue", onClick: () => setShowModal(true) },
-    { title: "Bulk Resume Screening", description: "Upload resumes, view AI ranked candidates.", buttonText: "Open AI Screening", color: "yellow", onClick: () => alert("🚧 Coming Soon") },
-    { title: "Interviews", description: "Schedule/manage interviews.", buttonText: "Open Interviews", color: "green", onClick: () => alert("🚧 Coming Soon") },
-    { title: "View Applications", description: "View & download resumes of applied candidates.", buttonText: "View Applications", color: "gray", onClick: () => navigate("/hr/applications") },
-    { title: "Attendance", description: "View and manage employee attendance records.", buttonText: "Manage Attendance", color: "green", onClick: () => navigate("/hr/attendance") },
-    { title: "Leave Requests", description: "Approve or reject employee leave requests.", buttonText: "Manage Leave", color: "blue", onClick: () => navigate("/hr/leave") },
-    { title: "Payroll", description: "Manage salary and generate employee payroll.", buttonText: "Manage Payroll", color: "yellow", onClick: () => navigate("/hr/payroll") },
-    { title: "Employee Management", description: "Manage employee profiles and structure.", buttonText: "Manage Employees", color: "gray", onClick: () => navigate("/hr/employee-management") },
-    { title: "Feedback", description: "View anonymous employee feedback.", buttonText: "View Feedback", color: "blue", onClick: () => navigate("/hr/feedback") },
-  ];
+  { title: "Jobs", description: "Post openings and track applications.", buttonText: "Manage Jobs", color: "blue", onClick: () => setShowModal(true) },
+  { title: "Bulk Resume Screening", description: "Upload resumes, view AI ranked candidates.", buttonText: "Open AI Screening", color: "yellow", onClick: () => alert("🚧 Coming Soon") },
+  { title: "Interviews", description: "Schedule/manage interviews.", buttonText: "Open Interviews", color: "green", onClick: () => alert("🚧 Coming Soon") },
+  { title: "View Applications", description: "View & download resumes of applied candidates.", buttonText: "View Applications", color: "gray", onClick: () => navigate("/hr/applications") },
+  { title: "Attendance", description: "View and manage employee attendance records.", buttonText: "Manage Attendance", color: "green", onClick: () => navigate("/hr/attendance") },
+  { title: "Leave Requests", description: "Approve or reject employee leave requests.", buttonText: "Manage Leave", color: "blue", onClick: () => navigate("/hr/leave") },
+  { title: "Payroll", description: "Manage salary and generate employee payroll.", buttonText: "Manage Payroll", color: "yellow", onClick: () => navigate("/hr/payroll") },
+  { title: "Employee Management", description: "Manage employee profiles and structure.", buttonText: "Manage Employees", color: "gray", onClick: () => navigate("/hr/employee-management") },
+  { title: "Projects", description: "Add and track employee projects.", buttonText: "Manage Projects", color: "yellow", onClick: () => navigate("/hr/projects") },
+  { title: "Feedback", description: "View anonymous employee feedback.", buttonText: "View Feedback", color: "blue", onClick: () => navigate("/hr/feedback") },
+];
+
 
   const handleSubmit = async (e) => {
     e.preventDefault();

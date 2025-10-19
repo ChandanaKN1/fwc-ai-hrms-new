@@ -6,15 +6,24 @@ const generateToken = (id) => jwt.sign({ id }, process.env.JWT_SECRET, { expires
 // 🟢 Register
 export const registerUser = async (req, res) => {
   try {
-    const { name, email, password, role } = req.body;
-    console.log("📥 Incoming signup:", { name, email, role });
+    const { name, email, password, role, department, designation, baseSalary } = req.body;
 
     const userExists = await User.findOne({ email });
     if (userExists) return res.status(400).json({ message: "User already exists" });
 
     if (!role) return res.status(400).json({ message: "Role is required" });
 
-    const user = await User.create({ name, email, password, role });
+    const userData = { name, email, password, role };
+
+    // ✅ Employee-specific fields
+    if (role === "Employee") {
+      userData.department = department || "Not Assigned";
+      userData.designation = designation || "Not Assigned";
+      userData.baseSalary = baseSalary || 30000;
+      userData.joinDate = new Date();
+    }
+
+    const user = await User.create(userData);
     const token = generateToken(user._id);
 
     res.status(201).json({
@@ -29,6 +38,7 @@ export const registerUser = async (req, res) => {
     res.status(500).json({ message: "Registration failed", error: error.message });
   }
 };
+
 
 // 🟢 Login
 export const loginUser = async (req, res) => {

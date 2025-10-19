@@ -4,7 +4,7 @@ import Attendance from "../models/Attendance.js";
 import LeaveRequest from "../models/LeaveRequest.js";
 import Payroll from "../models/Payroll.js";
 import User from "../models/User.js";
-import Feedback from "../models/Feedback.js"; // ✅ Added
+import Feedback from "../models/Feedback.js";
 
 const router = express.Router();
 
@@ -29,6 +29,7 @@ router.get("/attendance", protect, authorizeRoles("HR", "Admin"), async (req, re
 
     res.json(result);
   } catch (error) {
+    console.error("Attendance fetch error:", error);
     res.status(500).json({ message: "Failed to fetch attendance records" });
   }
 });
@@ -73,22 +74,108 @@ router.patch("/leave/:id", protect, authorizeRoles("HR", "Admin"), async (req, r
   }
 });
 
-/* 💰 Payroll */
+/* 👩‍💼 Employee Fetch for HR (Simplified) */
 router.get("/employees", protect, authorizeRoles("HR", "Admin"), async (req, res) => {
-  const employees = await User.find({ role: "Employee" }).select("name email role");
-  res.json(employees);
+  try {
+    const employees = await User.find({ role: "Employee" }).select("name email");
+    res.json(employees);
+  } catch (error) {
+    console.error("Employee fetch error:", error);
+    res.status(500).json({ message: "Failed to fetch employees" });
+  }
 });
 
+/* 💰 Payroll - Create (Single Employee) */
 router.post("/payroll", protect, authorizeRoles("HR", "Admin"), async (req, res) => {
-  const { employeeId, baseSalary, bonus, deductions, month } = req.body;
-  const netPay = baseSalary + bonus - deductions;
-  const payroll = await Payroll.create({ employeeId, baseSalary, bonus, deductions, netPay, month });
-  res.json(payroll);
+  try {
+    const { employeeId, baseSalary, bonus, deductions, month } = req.body;
+    const netPay = baseSalary + bonus - deductions;
+
+    const payroll = await Payroll.create({
+      employeeId,
+      baseSalary,
+      bonus,
+      deductions,
+      netPay,
+      month,
+    });
+
+    res.json(payroll);
+  } catch (error) {
+    console.error("Payroll creation error:", error);
+    res.status(500).json({ message: "Failed to create payroll" });
+  }
 });
 
+/* ✅ Payroll - Generate (Bulk for all employees) */
+router.post("/payroll/generate", protect, authorizeRoles("HR", "Admin"), async (req, res) => {
+  try {
+    let { month, baseSalary, allowance, deduction } = req.body;
+
+    // ✅ Input validation
+    if (!month) {
+      return res.status(400).json({ message: "Month is required" });
+    }
+
+    // ✅ Convert to proper numbers
+    baseSalary = Number(baseSalary);
+    allowance = Number(allowance);
+    deduction = Number(deduction);
+
+    if (isNaN(baseSalary) || isNaN(allowance) || isNaN(deduction)) {
+      return res.status(400).json({ message: "Invalid salary inputs" });
+    }
+
+    // ✅ Check if payroll already exists for this month
+    const existing = await Payroll.findOne({ month });
+    if (existing) {
+      return res.status(400).json({ message: `Payroll for ${month} already exists` });
+    }
+
+    // ✅ Get all employees
+    const employees = await User.find({ role: "Employee" });
+    if (employees.length === 0) {
+      return res.status(400).json({ message: "No employees found" });
+    }
+
+    const generatedPayrolls = [];
+
+    // ✅ Generate payrolls properly
+    for (const emp of employees) {
+      const finalBase = baseSalary;
+      const finalBonus = allowance;
+      const finalDeductions = deduction;
+      const netPay = finalBase + finalBonus - finalDeductions;
+
+      const payroll = await Payroll.create({
+        employeeId: emp._id,
+        baseSalary: finalBase,
+        bonus: finalBonus,
+        deductions: finalDeductions,
+        netPay,
+        month,
+        status: "Approved",
+      });
+
+      generatedPayrolls.push(payroll);
+    }
+
+    res.json({ message: `✅ Payroll generated for ${month}`, payrolls: generatedPayrolls });
+  } catch (error) {
+    console.error("Payroll generation error:", error);
+    res.status(500).json({ error: "Failed to generate payroll" });
+  }
+});
+
+/* 💰 Payroll - Get All */
 router.get("/payroll", protect, authorizeRoles("HR", "Admin"), async (req, res) => {
-  const records = await Payroll.find().populate("employeeId", "name email");
-  res.json(records);
+  try {
+    const records = await Payroll.find().populate("employeeId", "name email");
+    res.json(records);
+  } catch (error) {
+    console.error("Payroll fetch error:", error);
+    res.status(500).json({ message: "Failed to fetch payroll records" });
+  }
 });
 
 /* 🆕 📩 Get All Feedback (HR) */

@@ -23,7 +23,12 @@ import EmployeeLeavePage from "./pages/EmployeeLeavePage";
 import EmployeeFeedbackPage from "./pages/EmployeeFeedbackPage";
 import HREmployeeManagementPage from "./pages/HREmployeeManagementPage";
 import HRFeedbackPage from "./pages/HRFeedbackPage";
-import HRLeaveRequestsPage from "./pages/HRLeaveRequestsPage";  // ✅ newly added
+import HRLeaveRequestsPage from "./pages/HRLeaveRequestsPage";
+import HRPayrollPage from "./pages/HRPayrollPage";
+
+// 🆕 Project Management Pages
+import HRProjectsPage from "./pages/HRProjectsPage";
+import EmployeeProjectsPage from "./pages/EmployeeProjectsPage";
 
 export default function App() {
   return (
@@ -75,7 +80,6 @@ export default function App() {
             </ProtectedRoute>
           }
         />
-        {/* 🆕 HR: Employee Management */}
         <Route
           path="/hr/employee-management"
           element={
@@ -84,7 +88,6 @@ export default function App() {
             </ProtectedRoute>
           }
         />
-        {/* 🆕 HR: Feedback Management */}
         <Route
           path="/hr/feedback"
           element={
@@ -93,12 +96,28 @@ export default function App() {
             </ProtectedRoute>
           }
         />
-        {/* 🆕 HR: Leave Management */}
         <Route
           path="/hr/leave"
           element={
             <ProtectedRoute>
               <HRLeaveRequestsPage />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/hr/payroll"
+          element={
+            <ProtectedRoute>
+              <HRPayrollPage />
+            </ProtectedRoute>
+          }
+        />
+        {/* 🆕 HR: Projects */}
+        <Route
+          path="/hr/projects"
+          element={
+            <ProtectedRoute>
+              <HRProjectsPage />
             </ProtectedRoute>
           }
         />
@@ -122,7 +141,6 @@ export default function App() {
             </ProtectedRoute>
           }
         />
-        {/* 🆕 Employee: Payroll */}
         <Route
           path="/employee/payroll"
           element={
@@ -131,7 +149,6 @@ export default function App() {
             </ProtectedRoute>
           }
         />
-        {/* 🆕 Employee: Leave */}
         <Route
           path="/employee/leave"
           element={
@@ -140,12 +157,20 @@ export default function App() {
             </ProtectedRoute>
           }
         />
-        {/* 🆕 Employee: Feedback */}
         <Route
           path="/employee/feedback"
           element={
             <ProtectedRoute>
               <EmployeeFeedbackPage />
+            </ProtectedRoute>
+          }
+        />
+        {/* 🆕 Employee: Projects */}
+        <Route
+          path="/employee/projects"
+          element={
+            <ProtectedRoute>
+              <EmployeeProjectsPage />
             </ProtectedRoute>
           }
         />

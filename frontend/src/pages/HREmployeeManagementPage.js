@@ -2,7 +2,6 @@ import React, { useEffect, useState } from "react";
 
 export default function HREmployeeManagementPage() {
   const [employees, setEmployees] = useState([]);
-  const [newEmp, setNewEmp] = useState({ department: "", designation: "", joiningDate: "" });
 
   const fetchEmployees = async () => {
     const token = localStorage.getItem("token");
@@ -17,19 +16,6 @@ export default function HREmployeeManagementPage() {
     fetchEmployees();
   }, []);
 
-  const addEmployeeProfile = async (userId) => {
-    const token = localStorage.getItem("token");
-    await fetch("http://localhost:5000/api/hr/employees", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${token}`,
-      },
-      body: JSON.stringify({ userId, ...newEmp }),
-    });
-    fetchEmployees();
-  };
-
   return (
     <div className="p-8 pt-16 bg-gray-900 min-h-screen text-white">
       <h1 className="text-2xl font-bold mb-6">Employee Management</h1>
@@ -38,9 +24,6 @@ export default function HREmployeeManagementPage() {
           <tr className="bg-gray-800">
             <th className="p-2">Name</th>
             <th className="p-2">Email</th>
-            <th className="p-2">Department</th>
-            <th className="p-2">Designation</th>
-            <th className="p-2">Action</th>
           </tr>
         </thead>
         <tbody>
@@ -48,28 +31,6 @@ export default function HREmployeeManagementPage() {
             <tr key={emp._id} className="border-t border-gray-700">
               <td className="p-2">{emp.name}</td>
               <td className="p-2">{emp.email}</td>
-              <td className="p-2">
-                <input
-                  className="p-1 text-black"
-                  placeholder="Dept"
-                  onChange={(e) => setNewEmp({ ...newEmp, department: e.target.value })}
-                />
-              </td>
-              <td className="p-2">
-                <input
-                  className="p-1 text-black"
-                  placeholder="Designation"
-                  onChange={(e) => setNewEmp({ ...newEmp, designation: e.target.value })}
-                />
-              </td>
-              <td className="p-2">
-                <button
-                  className="bg-blue-600 px-3 py-1 rounded"
-                  onClick={() => addEmployeeProfile(emp._id)}
-                >
-                  Save
-                </button>
-              </td>
             </tr>
           ))}
         </tbody>

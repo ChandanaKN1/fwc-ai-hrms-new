@@ -3,6 +3,7 @@ import { protect, authorizeRoles } from "../middlewares/authMiddleware.js";
 import Attendance from "../models/Attendance.js";
 import LeaveRequest from "../models/LeaveRequest.js";
 import Feedback from "../models/Feedback.js";
+import Payroll from "../models/Payroll.js"; // ✅ Added
 
 const router = express.Router();
 
@@ -66,6 +67,23 @@ router.post("/feedback", protect, authorizeRoles("Employee"), async (req, res) =
     res.json({ message: "✅ Feedback submitted successfully", feedback });
   } catch (err) {
     res.status(500).json({ message: "Failed to submit feedback" });
+  }
+});
+
+/* 🧾 Get Payroll for Logged-in Employee ✅ */
+router.get("/payroll", protect, authorizeRoles("Employee"), async (req, res) => {
+  try {
+    const employeeId = req.user._id;
+    const payroll = await Payroll.find({ employeeId }).sort({ createdAt: -1 });
+
+    if (!payroll.length) {
+      return res.status(404).json({ message: "No payroll found for this employee" });
+    }
+
+    res.json(payroll);
+  } catch (err) {
+    console.error("Employee payroll fetch error:", err);
+    res.status(500).json({ message: "Failed to fetch payroll" });
   }
 });
 
