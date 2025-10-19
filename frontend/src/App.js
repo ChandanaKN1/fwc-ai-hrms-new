@@ -24,7 +24,8 @@ import EmployeeLeavePage from "./pages/EmployeeLeavePage";
 import EmployeeFeedbackPage from "./pages/EmployeeFeedbackPage";
 import HREmployeeManagementPage from "./pages/HREmployeeManagementPage";
 import HRFeedbackPage from "./pages/HRFeedbackPage";
-import HRLeaveRequestsPage from "./pages/HRLeaveRequestsPage";  // ✅ newly added
+import HRLeaveRequestsPage from "./pages/HRLeaveRequestsPage";
+import ResumeScreeningPage from "./pages/ResumeScreeningPage";
 
 export default function App() {
   return (
@@ -101,6 +102,15 @@ export default function App() {
           element={
             <ProtectedRoute>
               <HRLeaveRequestsPage />
+            </ProtectedRoute>
+          }
+        />
+        {/* 🆕 HR: Resume Screening */}
+        <Route
+          path="/hr/resume-screening"
+          element={
+            <ProtectedRoute>
+              <ResumeScreeningPage />
             </ProtectedRoute>
           }
         />

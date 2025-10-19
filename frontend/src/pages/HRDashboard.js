@@ -10,7 +10,7 @@ export default function HRDashboard() {
 
   const features = [
     { title: "Jobs", description: "Post openings and track applications.", buttonText: "Manage Jobs", color: "blue", onClick: () => setShowModal(true) },
-    { title: "Bulk Resume Screening", description: "Upload resumes, view AI ranked candidates.", buttonText: "Open AI Screening", color: "yellow", onClick: () => alert("🚧 Coming Soon") },
+    { title: "Bulk Resume Screening", description: "Upload resumes, view AI ranked candidates.", buttonText: "Open AI Screening", color: "yellow", onClick: () => navigate("/hr/resume-screening") },
     { title: "Interviews", description: "Schedule/manage interviews.", buttonText: "Open Interviews", color: "green", onClick: () => alert("🚧 Coming Soon") },
     { title: "View Applications", description: "View & download resumes of applied candidates.", buttonText: "View Applications", color: "gray", onClick: () => navigate("/hr/applications") },
     { title: "Attendance", description: "View and manage employee attendance records.", buttonText: "Manage Attendance", color: "green", onClick: () => navigate("/hr/attendance") },

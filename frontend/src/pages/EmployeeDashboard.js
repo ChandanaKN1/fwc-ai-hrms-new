@@ -10,7 +10,7 @@ export default function EmployeeDashboard() {
     { title: "Payroll", description: "View payslips and salary details.", buttonText: "View Payroll", color: "gray", onClick: () => navigate("/employee/payroll") },
     { title: "Leave Requests", description: "Submit and view your leave requests.", buttonText: "Request Leave", color: "green", onClick: () => navigate("/employee/leave") },
     { title: "Feedback", description: "Share feedback anonymously with HR.", buttonText: "Give Feedback", color: "blue", onClick: () => navigate("/employee/feedback") },
-    { title: "Chatbot", description: "Ask FAQs about status, leave, payroll.", buttonText: "Open Chatbot", color: "green" },
+    // { title: "Chatbot", description: "Ask FAQs about status, leave, payroll.", buttonText: "Open Chatbot", color: "green" },
   ];
 
   return (
