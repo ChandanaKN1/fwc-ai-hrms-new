@@ -1,6 +1,6 @@
 import google.generativeai as genai
 from pymongo import MongoClient
-from config import GOOGLE_AI_KEY, MONGO_URI, DB_NAME, COLLECTION_NAME
+from config import GOOGLE_AI_KEY, MONGO_URI, DB_NAME, COLLECTION_NAMES
 import argparse
 import sys
 
@@ -15,38 +15,45 @@ model = genai.GenerativeModel("gemini-2.0-flash")
 # ---------------------------------------------
 client = MongoClient(MONGO_URI)
 db = client[DB_NAME]
-collection = db[COLLECTION_NAME]
 
 # ---------------------------------------------
-# Fetch Knowledge from MongoDB
+# Fetch Knowledge from Multiple MongoDB Collections
 # ---------------------------------------------
 def get_knowledge_from_mongo():
-    docs = list(collection.find({}, {"_id": 0}))
-    if not docs:
-        #print("⚠️ No data found in MongoDB collection!")
-        return "No data available in the database."
-    
-    
-    return "\n".join([str(doc) for doc in docs])
+    knowledge_chunks = []
 
+    for col_name in COLLECTION_NAMES:
+        col = db[col_name]
+        docs = list(col.find({}, {"_id": 0}))
+
+        if docs:
+            knowledge_chunks.append(
+                f"--- Collection: {col_name} ---\n" + "\n".join([str(doc) for doc in docs])
+            )
+        else:
+            knowledge_chunks.append(f"--- Collection: {col_name} ---\nNo data found")
+
+    return "\n".join(knowledge_chunks)
 
 # ---------------------------------------------
-# Generate Gemini Response
+# Generate Gemini Response with Fallback
 # ---------------------------------------------
 def generate_response(user_message: str) -> str:
     knowledge = get_knowledge_from_mongo()
 
     prompt = f"""
-You are a friendly and knowledgeable chatbot.
+You are a friendly and knowledgeable HRMS chatbot.
 
-Your behavior:
-1. If the user's question matches or relates to the data below, answer strictly from it.
-2. If it’s a general or casual question (like greetings, basic facts, or who you are), respond naturally.
-3. If it’s completely outside these areas, reply:
-   "I'm sorry, I can only answer questions related to the available database or general topics."
+You have access to the following database collections:
+{', '.join(COLLECTION_NAMES)}
 
-Here is the database content you can use:
+Below is the database content you can use:
 {knowledge}
+
+Your response rules:
+1. If the user's question relates to the database content (e.g., employees, jobs, payroll, attendance, etc.), answer strictly based on it.
+2. If the question is a general or creative request (e.g., "write a job description", greetings, templates), use your own knowledge to generate a natural response.
+3. If the question is completely irrelevant to HRMS or general topics, politely say you can’t answer it.
 
 User: {user_message}
 """
@@ -61,30 +68,29 @@ User: {user_message}
 # CLI Chat Interface or API Mode
 # ---------------------------------------------
 def main():
-    # Check if script is being run with arguments
-    parser = argparse.ArgumentParser(description='Chatbot with MongoDB knowledge base')
+    parser = argparse.ArgumentParser(description='HRMS Chatbot with MongoDB + Gemini')
     parser.add_argument('--message', type=str, help='Message to process (API mode)')
     args = parser.parse_args()
-    
-    # API mode - process single message and exit
+
+    # API mode (useful for frontend calls)
     if args.message:
         reply = generate_response(args.message)
         print(reply)
         return
-    
-    # Interactive CLI mode
-    print("🤖 MongoDB + Gemini Chatbot (with basic question support)")
+
+    # CLI mode
+    print("🤖 HRMS Chatbot (MongoDB + Gemini)")
     print("Type 'exit' to quit.\n")
 
     while True:
         user_input = input("You: ")
         if user_input.lower() in ["exit", "quit"]:
-            print("Chatbot: Goodbye!")
+            print("Chatbot: Goodbye! 👋")
             break
 
         reply = generate_response(user_input)
         print(f"Chatbot: {reply}\n")
 
+
 if __name__ == "__main__":
     main()
-

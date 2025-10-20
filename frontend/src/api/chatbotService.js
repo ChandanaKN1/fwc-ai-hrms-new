@@ -35,6 +35,7 @@ export const sendMessage = async (message) => {
   }
 };
 
-export default {
+const chatbotService= {
   sendMessage,
 };
+export default chatbotService;

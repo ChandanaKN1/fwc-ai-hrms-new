@@ -5,14 +5,17 @@ import dotenv
 dotenv.load_dotenv('.env')
 dotenv.load_dotenv('.env.development')
 
+# Gemini API Key
 GOOGLE_AI_KEY = os.getenv('GOOGLE_AI_KEY')
 
 # MongoDB Configuration
 MONGO_URI = os.getenv('MONGO_URI')
 DB_NAME = os.getenv('DB_NAME')
-COLLECTION_NAME = os.getenv('COLLECTION_NAME')
 
-# Gemini generation settings (optional)
+# Fetch collection names from env
+COLLECTION_NAMES = os.getenv('COLLECTION_NAMES').split(',')
+
+# Optional Gemini settings (you can tune later)
 text_generation_config = {
     "temperature": 0.7,
     "top_p": 1,
