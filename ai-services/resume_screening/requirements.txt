@@ -1,1 +1,6 @@
-
+flask 
+PyPDF2 
+docx2txt
+sentence-transformers
+torch
+smtplib

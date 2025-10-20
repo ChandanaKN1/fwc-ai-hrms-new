@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import DashboardLayout from "../components/DashboardLayout";
 
 export default function HRLeaveRequestsPage() {
   const [requests, setRequests] = useState([]);
@@ -30,7 +31,7 @@ export default function HRLeaveRequestsPage() {
   }, []);
 
   return (
-    <div className="p-8 pt-16 bg-gray-900 min-h-screen text-white">
+    <DashboardLayout>
       <h1 className="text-2xl font-bold mb-6">Leave Requests</h1>
       {requests.length === 0 ? (
         <p>No leave requests found.</p>
@@ -79,6 +80,6 @@ export default function HRLeaveRequestsPage() {
           </tbody>
         </table>
       )}
-    </div>
+    </DashboardLayout>
   );
 }

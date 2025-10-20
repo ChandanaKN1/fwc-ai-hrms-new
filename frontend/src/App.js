@@ -5,6 +5,7 @@ import NavBar from "./components/NavBar";
 import AuthForms from "./components/AuthForms";
 import DashboardRedirect from "./pages/DashboardRedirect";
 import ProtectedRoute from "./components/ProtectedRoute";
+import { ChatbotProvider } from "./context/ChatbotContext";
 
 // Dashboards
 import AdminDashboard from "./pages/AdminDashboard";
@@ -29,12 +30,14 @@ import HRPayrollPage from "./pages/HRPayrollPage";
 // 🆕 Project Management Pages
 import HRProjectsPage from "./pages/HRProjectsPage";
 import EmployeeProjectsPage from "./pages/EmployeeProjectsPage";
+import ResumeScreeningPage from "./pages/ResumeScreeningPage";
 
 export default function App() {
   return (
     <Router>
-      <NavBar />
-      <Routes>
+      <ChatbotProvider>
+        <NavBar />
+        <Routes>
         {/* ==============================
            AUTHENTICATION
         ============================== */}
@@ -114,10 +117,19 @@ export default function App() {
         />
         {/* 🆕 HR: Projects */}
         <Route
-          path="/hr/projects"
+  path="/hr/projects"
+  element={
+    <ProtectedRoute>
+      <HRProjectsPage />
+    </ProtectedRoute>
+  }
+/>
+        {/* 🆕 HR: Resume Screening */}
+        <Route
+          path="/hr/resume-screening"
           element={
             <ProtectedRoute>
-              <HRProjectsPage />
+              <ResumeScreeningPage />
             </ProtectedRoute>
           }
         />
@@ -187,6 +199,7 @@ export default function App() {
           }
         />
       </Routes>
+      </ChatbotProvider>
     </Router>
   );
 }
