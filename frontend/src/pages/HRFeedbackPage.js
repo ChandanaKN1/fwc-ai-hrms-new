@@ -47,7 +47,6 @@ export default function HRFeedbackPage() {
                 <span className="text-[#1E3A8A] font-semibold text-base">
                   Rating: {f.rating}
                 </span>
-                <span className="text-yellow-400 text-xl">⭐</span>
               </div>
             </div>
           ))}

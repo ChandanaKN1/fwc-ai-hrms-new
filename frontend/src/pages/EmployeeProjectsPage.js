@@ -31,63 +31,84 @@ export default function EmployeeProjectsPage() {
   const history = projects.filter((p) => p.status !== "Active");
 
   return (
-    <div className="p-8 pt-16 bg-gray-900 min-h-screen text-white">
-      <h1 className="text-2xl font-bold mb-6">My Projects</h1>
+    <div className="bg-gray-100 min-h-screen p-8 pt-20 text-gray-800 font-inter">
+      <h1 className="text-3xl font-bold mb-8 tracking-tight text-center">
+        My Projects
+      </h1>
 
       {loading ? (
-        <p>Loading projects...</p>
+        <p className="text-center text-gray-500">Loading projects...</p>
       ) : (
-        <>
-          {/* 📌 Active Project */}
-          {activeProject ? (
-            <div className="bg-gray-800 p-4 rounded mb-6 shadow-lg">
-              <h2 className="text-xl font-bold mb-2">📌 Active Project</h2>
-              <p>
-                <b>Title:</b> {activeProject.title}
-              </p>
-              <p>
-                <b>Description:</b> {activeProject.description}
-              </p>
-              <p>
-                <b>Deadline:</b>{" "}
-                {new Date(activeProject.deadline).toLocaleDateString()}
-              </p>
-              <p>
-                <b>Status:</b>{" "}
-                <span className="text-green-400 font-semibold">
-                  {activeProject.status}
-                </span>
-              </p>
-            </div>
-          ) : (
-            <p>No active project assigned.</p>
-          )}
-
-          {/* 📜 Project History */}
-          <h2 className="text-xl font-bold mb-4">📜 Project History</h2>
-          {history.length === 0 ? (
-            <p>No past projects.</p>
-          ) : (
-            <ul className="space-y-3">
-              {history.map((p) => (
-                <li
-                  key={p._id}
-                  className="bg-gray-800 p-3 rounded shadow border border-gray-700"
-                >
-                  <p className="font-semibold">{p.title}</p>
-                  <p className="text-sm text-gray-300">{p.description}</p>
-                  <p className="text-sm">
-                    Deadline:{" "}
-                    <span className="text-yellow-400">
-                      {new Date(p.deadline).toLocaleDateString()}
+        <div className="max-w-4xl mx-auto space-y-8">
+          {/*  Active Project */}
+          <div>
+            <h2 className="text-xl font-semibold mb-4 flex items-center gap-2">
+               Active Project
+            </h2>
+            {activeProject ? (
+              <div className="bg-white p-6 rounded-xl shadow hover:shadow-lg transition">
+                <p className="text-lg font-semibold text-indigo-700 mb-2">
+                  {activeProject.title}
+                </p>
+                <p className="text-sm text-gray-600 mb-2">
+                  {activeProject.description}
+                </p>
+                <div className="text-sm space-y-1">
+                  <p>
+                    <span className="font-semibold">Deadline:</span>{" "}
+                    {new Date(activeProject.deadline).toLocaleDateString()}
+                  </p>
+                  <p>
+                    <span className="font-semibold">Status:</span>{" "}
+                    <span className="text-green-600 font-medium">
+                      {activeProject.status}
                     </span>
                   </p>
-                  <p className="text-sm text-gray-400">Status: {p.status}</p>
-                </li>
-              ))}
-            </ul>
-          )}
-        </>
+                </div>
+              </div>
+            ) : (
+              <p className="text-gray-500 italic">
+                No active project assigned yet.
+              </p>
+            )}
+          </div>
+
+          {/*  Project History */}
+          <div>
+            <h2 className="text-xl font-semibold mb-4 flex items-center gap-2">
+               Project History
+            </h2>
+            {history.length === 0 ? (
+              <p className="text-gray-500 italic">No past projects found.</p>
+            ) : (
+              <ul className="space-y-4">
+                {history.map((p) => (
+                  <li
+                    key={p._id}
+                    className="bg-white p-5 rounded-xl shadow hover:shadow-lg transition border border-gray-200"
+                  >
+                    <p className="font-semibold text-gray-800 mb-1">{p.title}</p>
+                    <p className="text-sm text-gray-600 mb-2">{p.description}</p>
+                    <div className="text-sm space-y-1">
+                      <p>
+                        <span className="font-semibold">Deadline:</span>{" "}
+                        <span className="text-yellow-600 font-medium">
+                          {new Date(p.deadline).toLocaleDateString()}
+                        </span>
+                      </p>
+                      <p>
+                        <span className="font-semibold">Status:</span>{" "}
+                        <span className="text-gray-700 font-medium">
+                          {p.status}
+                        </span>
+                      </p>
+                    </div>
+                  </li>
+                ))}
+              </ul>
+            )}
+          </div>
+        </div>
       )}
     </div>
   );

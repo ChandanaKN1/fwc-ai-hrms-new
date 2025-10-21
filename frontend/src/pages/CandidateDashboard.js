@@ -1,21 +1,18 @@
 import React, { useState } from "react";
-import DashboardCard from "../components/DashboardCard";
 import { getAllJobs } from "../api/api";
 
 export default function CandidateDashboard() {
   const [jobs, setJobs] = useState([]);
   const [showJobs, setShowJobs] = useState(false);
-  const [resumeFiles, setResumeFiles] = useState({}); // store file per job ID
-  const [candidateData, setCandidateData] = useState({}); // store name/email per job ID
+  const [resumeFiles, setResumeFiles] = useState({});
+  const [candidateData, setCandidateData] = useState({});
 
-  // 🔸 Fetch jobs when Find Jobs is clicked
   const handleFindJobs = async () => {
     const { data } = await getAllJobs();
     setJobs(data);
     setShowJobs(true);
   };
 
-  // 📝 Handle input change for each job separately
   const handleInputChange = (e, jobId) => {
     const { name, value } = e.target;
     setCandidateData((prev) => ({
@@ -27,7 +24,6 @@ export default function CandidateDashboard() {
     }));
   };
 
-  // 📎 Handle file selection for each job separately
   const handleFileChange = (e, jobId) => {
     const file = e.target.files[0];
     setResumeFiles((prev) => ({
@@ -36,7 +32,6 @@ export default function CandidateDashboard() {
     }));
   };
 
-  // 📤 Submit application for the selected job
   const handleApply = async (jobId) => {
     const data = candidateData[jobId] || {};
     const resumeFile = resumeFiles[jobId];
@@ -63,7 +58,7 @@ export default function CandidateDashboard() {
       });
 
       if (res.ok) {
-        alert("✅ Application submitted successfully!");
+        alert("Application submitted successfully!");
         setCandidateData((prev) => ({
           ...prev,
           [jobId]: { name: "", email: "" },
@@ -73,111 +68,141 @@ export default function CandidateDashboard() {
           [jobId]: null,
         }));
       } else {
-        alert("❌ Failed to apply for the job");
+        alert("Failed to apply for the job");
       }
     } catch (error) {
       console.error(error);
-      alert("❌ Something went wrong");
+      alert("Something went wrong");
     }
   };
 
   const features = [
     {
       title: "AI Interview",
-      description: "Take mock interviews with AI interviewer and get feedback.",
-      buttonText: "Start AI Interview",
-      color: "yellow",
+      description:
+        "Simulate real interviews with an AI interviewer and get instant feedback to improve your performance.",
+      onClick: () => alert("AI Interview feature coming soon!"),
     },
     {
       title: "Discover Jobs",
-      description: "Browse available job openings.",
-      buttonText: "Find Jobs",
-      color: "blue",
+      description:
+        "Explore a wide range of job openings tailored to your skills and interests. Apply in one click.",
       onClick: handleFindJobs,
     },
     {
       title: "Resume Builder",
-      description: "Build a professional resume with AI-powered suggestions.",
-      buttonText: "Build Resume",
-      color: "green",
+      description:
+        "Create a polished, professional resume with AI-powered writing and formatting suggestions.",
+      onClick: () => alert("Resume Builder feature coming soon!"),
     },
     {
       title: "Skill Tracker",
-      description: "Track and improve your skill progress over time.",
-      buttonText: "View Skills",
-      color: "gray",
+      description:
+        "Track your skill development journey, set goals, and measure your progress over time.",
+      onClick: () => alert("Skill Tracker feature coming soon!"),
     },
   ];
 
   return (
-    <div className="p-8 pt-16 bg-gray-900 min-h-screen text-white">
-      <h1 className="text-2xl font-bold mb-6">Candidate Dashboard</h1>
+    <div className="bg-gray-100 min-h-screen p-8 pt-20 text-gray-800 font-inter">
+      <div className="max-w-7xl mx-auto">
+        {/* Page Title */}
+        <h1 className="text-3xl font-bold mb-10 tracking-tight text-center">
+          Candidate Dashboard
+        </h1>
 
-      {/* Feature Cards */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 items-stretch mb-8">
-        {features.map((f, i) => (
-          <DashboardCard key={i} {...f} />
-        ))}
-      </div>
+        {/* Feature Cards */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 mb-10">
+          {features.map((f, i) => (
+            <div
+              key={i}
+              onClick={f.onClick}
+              className="cursor-pointer bg-white rounded-2xl shadow-lg border border-gray-200 p-8 flex flex-col justify-between h-48 hover:shadow-xl hover:-translate-y-1 transition-all duration-200"
+            >
+              <div>
+                <h3 className="text-xl font-semibold mb-3 text-gray-900 group-hover:text-[#1E3A8A]">
+                  {f.title}
+                </h3>
+                <p className="text-sm text-gray-600 leading-snug line-clamp-3">
+                  {f.description}
+                </p>
+              </div>
+            </div>
+          ))}
+        </div>
 
-      {/* Job Section */}
-      {showJobs && (
-        <>
-          <h2 className="text-xl font-bold mb-4">Available Jobs</h2>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-            {jobs.length > 0 ? (
-              jobs.map((job) => {
-                const data = candidateData[job._id] || { name: "", email: "" };
-                return (
-                  <div
-                    key={job._id}
-                    className="bg-gray-800 p-4 rounded-lg border border-gray-700 flex flex-col justify-between"
-                  >
-                    <div>
-                      <h3 className="text-lg font-bold mb-1">{job.title}</h3>
-                      <p className="text-sm text-gray-300 mb-1">{job.description}</p>
-                      <p className="text-sm text-gray-400">{job.location}</p>
+        {/* Job Section */}
+        {showJobs && (
+          <div className="mt-12">
+            <h2 className="text-2xl font-semibold mb-6 text-center">
+              Available Jobs
+            </h2>
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+              {jobs.length > 0 ? (
+                jobs.map((job) => {
+                  const data = candidateData[job._id] || { name: "", email: "" };
+                  return (
+                    <div
+                      key={job._id}
+                      className="bg-white rounded-xl shadow-md border border-gray-200 p-6 flex flex-col justify-between hover:shadow-lg transition"
+                    >
+                      {/* Job Info */}
+                      <div>
+                        <h3 className="text-lg font-semibold mb-1 text-gray-800 capitalize">
+                          {job.title}
+                        </h3>
+                        <p className="text-sm text-gray-600 mb-2">
+                          {job.description}
+                        </p>
+                        <p className="text-sm text-gray-500 font-medium">
+                          {job.location}
+                        </p>
+                      </div>
+
+                      {/* Form */}
+                      <div className="mt-4 space-y-3">
+                        <input
+                          type="text"
+                          name="name"
+                          placeholder="Your Name"
+                          value={data.name}
+                          onChange={(e) => handleInputChange(e, job._id)}
+                          className="w-full p-2 rounded-lg border border-gray-300 text-gray-800 focus:outline-none focus:ring-2 focus:ring-[#1E3A8A]"
+                        />
+                        <input
+                          type="email"
+                          name="email"
+                          placeholder="Your Email"
+                          value={data.email}
+                          onChange={(e) => handleInputChange(e, job._id)}
+                          className="w-full p-2 rounded-lg border border-gray-300 text-gray-800 focus:outline-none focus:ring-2 focus:ring-[#1E3A8A]"
+                        />
+                        <input
+                          type="file"
+                          accept=".pdf,.doc,.docx"
+                          onChange={(e) => handleFileChange(e, job._id)}
+                          className="block w-full text-sm text-gray-600 cursor-pointer file:mr-4 file:py-1 file:px-3 file:rounded-lg file:border-0 file:text-sm file:font-medium file:bg-[#1E3A8A] file:text-white hover:file:bg-[#162c6a] transition"
+                        />
+
+                        <button
+                          onClick={() => handleApply(job._id)}
+                          className="w-full bg-[#1E3A8A] hover:bg-[#162c6a] text-white py-2 rounded-lg font-medium transition-all shadow-sm hover:shadow-md focus:outline-none"
+                        >
+                          Apply
+                        </button>
+                      </div>
                     </div>
-
-                    <div className="mt-4">
-                      <input
-                        type="text"
-                        name="name"
-                        placeholder="Your Name"
-                        value={data.name}
-                        onChange={(e) => handleInputChange(e, job._id)}
-                        className="mb-2 p-2 text-black w-full rounded"
-                      />
-                      <input
-                        type="email"
-                        name="email"
-                        placeholder="Your Email"
-                        value={data.email}
-                        onChange={(e) => handleInputChange(e, job._id)}
-                        className="mb-2 p-2 text-black w-full rounded"
-                      />
-                      <input
-                        type="file"
-                        accept=".pdf,.doc,.docx"
-                        onChange={(e) => handleFileChange(e, job._id)}
-                        className="mb-2 block w-full text-sm text-gray-300"
-                      />
-                      <button
-                        onClick={() => handleApply(job._id)}
-                        className="bg-green-600 hover:bg-green-700 w-full text-white py-2 rounded"
-                      >
-                        Apply
-                      </button>
-                    </div>
-                  </div>
-                );
-              })
-            ) : (
-              <p>No jobs available yet.</p>
-            )}
+                  );
+                })
+              ) : (
+                <p className="text-center col-span-full text-gray-500">
+                  No jobs available yet.
+                </p>
+              )}
+            </div>
           </div>
-        </>
-      )}
+        )}
+      </div>
     </div>
   );
 }

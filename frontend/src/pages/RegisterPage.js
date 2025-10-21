@@ -41,7 +41,7 @@ export default function RegisterPage() {
             value={role}
             onChange={(e) => setRole(e.target.value)}
             required
-            className="w-full p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-800"
+            className="w-full p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-[#1E3A8A]"
           >
             <option value="">Select Role</option>
             <option value="Employee">Employee</option>
@@ -50,9 +50,10 @@ export default function RegisterPage() {
             <option value="Candidate">Candidate</option>
           </select>
 
+          {/* Register Button - Indigo */}
           <button
             type="submit"
-            className="w-full bg-black hover:bg-gray-800 text-white py-3 rounded-lg font-medium transition"
+            className="w-full bg-[#1E3A8A] hover:bg-[#162c6a] text-white py-3 rounded-lg font-medium transition-all shadow-md hover:shadow-lg"
           >
             Register
           </button>
@@ -65,26 +66,29 @@ export default function RegisterPage() {
           <div className="flex-grow h-px bg-gray-300"></div>
         </div>
 
-        {/* Google Login */}
+        {/* Google Login Button - Indigo */}
         <button
           type="button"
           onClick={() =>
             (window.location.href = "http://localhost:5000/api/auth/google")
           }
-          className="w-full flex items-center justify-center gap-2 border border-gray-300 hover:bg-gray-100 py-3 rounded-lg transition"
+          className="w-full flex items-center justify-center gap-2 bg-[#1E3A8A] hover:bg-[#162c6a] text-white py-3 rounded-lg font-medium transition-all shadow-md hover:shadow-lg"
         >
           <img
             src="https://www.svgrepo.com/show/475656/google-color.svg"
             alt="Google"
-            className="w-5 h-5"
+            className="w-5 h-5 bg-white rounded-full p-0.5"
           />
-          <span className="text-gray-700 font-medium">Login with Google</span>
+          <span>Login with Google</span>
         </button>
 
         {/* Link to Login */}
         <p className="mt-6 text-center text-sm text-gray-600">
           Already have an account?{" "}
-          <a href="/" className="text-black font-semibold hover:underline">
+          <a
+            href="/"
+            className="text-[#1E3A8A] font-semibold hover:underline"
+          >
             Login here
           </a>
         </p>
