@@ -11,35 +11,22 @@ export default function NavBar() {
       setLoggedIn(true);
     } else {
       fetch("http://localhost:5000/api/auth/user", { credentials: "include" })
-        .then((res) => {
-          if (res.ok) setLoggedIn(true);
-          else setLoggedIn(false);
-        })
+        .then((res) => setLoggedIn(res.ok))
         .catch(() => setLoggedIn(false));
     }
   };
 
   useEffect(() => {
     checkLogin();
-
-    // ✅ Listen for login/logout in same tab
     window.addEventListener("authChange", checkLogin);
-
-    return () => {
-      window.removeEventListener("authChange", checkLogin);
-    };
+    return () => window.removeEventListener("authChange", checkLogin);
   }, []);
 
   const handleLogout = async () => {
     localStorage.removeItem("token");
     localStorage.removeItem("role");
-
-    await fetch("http://localhost:5000/api/auth/logout", {
-      credentials: "include",
-    });
-
+    await fetch("http://localhost:5000/api/auth/logout", { credentials: "include" });
     setLoggedIn(false);
-    // 🔥 Trigger update for NavBar instantly
     window.dispatchEvent(new Event("authChange"));
     window.location.href = "/";
   };
@@ -47,47 +34,18 @@ export default function NavBar() {
   const isLoginPage = location.pathname === "/";
 
   return (
-    <nav
-      style={{
-        display: "flex",
-        justifyContent: "space-between",
-        alignItems: "center",
-        background: "#111827",
-        padding: "10px 20px",
-        color: "white",
-      }}
-    >
-      <h2>HRMS System</h2>
+    <nav className="fixed top-0 left-0 right-0 bg-white border-b border-gray-200 z-50 flex justify-between items-center px-8 py-3 shadow-sm">
+      <div className="flex items-center gap-3">
+        <div className="text-xl font-semibold text-gray-800">HRMS</div>
+        
+      </div>
 
       {!isLoginPage && loggedIn && (
         <button
           onClick={handleLogout}
-          style={{
-            backgroundColor: "#ef4444",
-            padding: "8px 16px",
-            color: "#fff",
-            border: "none",
-            cursor: "pointer",
-            borderRadius: "5px",
-          }}
+          className="border border-gray-300 text-gray-700 px-4 py-2 rounded-md hover:bg-gray-100 transition"
         >
           Logout
-        </button>
-      )}
-
-      {isLoginPage && !loggedIn && (
-        <button
-          onClick={() => (window.location.href = "/")}
-          style={{
-            backgroundColor: "#3b82f6",
-            padding: "8px 16px",
-            color: "#fff",
-            border: "none",
-            cursor: "pointer",
-            borderRadius: "5px",
-          }}
-        >
-          Login
         </button>
       )}
     </nav>

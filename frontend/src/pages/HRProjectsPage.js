@@ -2,7 +2,11 @@ import React, { useEffect, useState } from "react";
 
 export default function HRProjectsPage() {
   const [projects, setProjects] = useState([]);
-  const [newProject, setNewProject] = useState({ title: "", description: "", deadline: "" });
+  const [newProject, setNewProject] = useState({
+    title: "",
+    description: "",
+    deadline: "",
+  });
 
   const fetchProjects = async () => {
     const token = localStorage.getItem("token");
@@ -18,7 +22,10 @@ export default function HRProjectsPage() {
     const token = localStorage.getItem("token");
     await fetch("http://localhost:5000/api/projects", {
       method: "POST",
-      headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}` },
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
       body: JSON.stringify(newProject),
     });
     setNewProject({ title: "", description: "", deadline: "" });
@@ -29,7 +36,10 @@ export default function HRProjectsPage() {
     const token = localStorage.getItem("token");
     await fetch(`http://localhost:5000/api/projects/${id}`, {
       method: "PATCH",
-      headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}` },
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
       body: JSON.stringify({ status }),
     });
     fetchProjects();
@@ -40,64 +50,95 @@ export default function HRProjectsPage() {
   }, []);
 
   return (
-    <div className="p-8 pt-16 bg-gray-900 min-h-screen text-white">
-      <h1 className="text-2xl font-bold mb-6">Project Management (HR)</h1>
+    <div className="bg-gray-100 min-h-screen p-8 pt-20 text-gray-800 font-inter">
+      <h1 className="text-3xl font-bold mb-8 tracking-tight text-center">
+        Project Management
+      </h1>
 
-      <form onSubmit={addProject} className="bg-gray-800 p-4 rounded-lg mb-6">
+      {/* 📌 Add Project Form */}
+      <form
+        onSubmit={addProject}
+        className="bg-white rounded-xl shadow p-6 mb-8 max-w-2xl mx-auto"
+      >
         <input
           type="text"
           placeholder="Project Title"
           value={newProject.title}
-          onChange={(e) => setNewProject({ ...newProject, title: e.target.value })}
-          className="w-full p-2 mb-2 text-black"
+          onChange={(e) =>
+            setNewProject({ ...newProject, title: e.target.value })
+          }
+          className="w-full p-2 mb-3 border rounded"
           required
         />
         <textarea
           placeholder="Project Description"
           value={newProject.description}
-          onChange={(e) => setNewProject({ ...newProject, description: e.target.value })}
-          className="w-full p-2 mb-2 text-black"
+          onChange={(e) =>
+            setNewProject({ ...newProject, description: e.target.value })
+          }
+          className="w-full p-2 mb-3 border rounded h-24 resize-none"
           required
         />
         <input
           type="date"
           value={newProject.deadline}
-          onChange={(e) => setNewProject({ ...newProject, deadline: e.target.value })}
-          className="w-full p-2 mb-2 text-black"
+          onChange={(e) =>
+            setNewProject({ ...newProject, deadline: e.target.value })
+          }
+          className="w-full p-2 mb-3 border rounded"
           required
         />
-        <button className="bg-blue-600 px-4 py-2 rounded">Add Project</button>
+        <button className="bg-[#1E3A8A] hover:bg-[#1E40AF] text-white px-6 py-2 rounded-full transition-all shadow-sm hover:shadow-md w-full">
+          Add Project
+        </button>
       </form>
 
-      <h2 className="text-xl font-semibold mb-4">📜 Project List</h2>
-      <table className="w-full text-left border border-gray-700">
-        <thead>
-          <tr className="bg-gray-800">
-            <th className="p-2">Title</th>
-            <th className="p-2">Description</th>
-            <th className="p-2">Deadline</th>
-            <th className="p-2">Status</th>
-            <th className="p-2">Action</th>
-          </tr>
-        </thead>
-        <tbody>
-          {projects.map((p) => (
-            <tr key={p._id} className="border-t border-gray-700">
-              <td className="p-2">{p.title}</td>
-              <td className="p-2">{p.description}</td>
-              <td className="p-2">{new Date(p.deadline).toLocaleDateString()}</td>
-              <td className="p-2">{p.status}</td>
-              <td className="p-2">
-                {p.status === "Active" ? (
-                  <button onClick={() => updateStatus(p._id, "Completed")} className="bg-green-600 px-3 py-1 rounded">Mark Completed</button>
-                ) : (
-                  <button onClick={() => updateStatus(p._id, "Active")} className="bg-yellow-600 px-3 py-1 rounded">Make Active</button>
-                )}
-              </td>
+      {/* 📊 Projects Table */}
+      <div className="overflow-x-auto max-w-6xl mx-auto">
+        <table className="w-full text-left border border-gray-300 rounded-xl bg-white shadow">
+          <thead>
+            <tr className="bg-gray-50">
+              <th className="p-3 w-48">Title</th>
+              <th className="p-3 w-[500px]">Description</th> {/* Wider column */}
+              <th className="p-3 w-40">Deadline</th>
+              <th className="p-3 w-32">Status</th>
+              <th className="p-3 w-48 text-center">Action</th>
             </tr>
-          ))}
-        </tbody>
-      </table>
+          </thead>
+          <tbody>
+            {projects.map((p) => (
+              <tr
+                key={p._id}
+                className="border-t border-gray-200 hover:bg-gray-50 transition"
+              >
+                <td className="p-3 font-medium">{p.title}</td>
+                <td className="p-3 text-gray-700">{p.description}</td>
+                <td className="p-3">
+                  {new Date(p.deadline).toLocaleDateString()}
+                </td>
+                <td className="p-3">{p.status}</td>
+                <td className="p-3 text-center">
+                  {p.status === "Active" ? (
+                    <button
+                      onClick={() => updateStatus(p._id, "Completed")}
+                      className="bg-[#1E3A8A] hover:bg-[#1E40AF] text-white px-6 py-2 rounded-full transition-all shadow-sm hover:shadow-md"
+                    >
+                      Mark Completed
+                    </button>
+                  ) : (
+                    <button
+                      onClick={() => updateStatus(p._id, "Active")}
+                      className="border border-[#1E3A8A] text-[#1E3A8A] hover:bg-[#E0E7FF] px-8 py-2 rounded-full transition-all shadow-sm hover:shadow-md"
+                    >
+                      Make Active
+                    </button>
+                  )}
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
     </div>
   );
 }

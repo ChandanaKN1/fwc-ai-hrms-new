@@ -8,6 +8,7 @@ const Chatbot = ({ userRole }) => {
   ]);
   const [inputValue, setInputValue] = useState('');
   const [isLoading, setIsLoading] = useState(false);
+  // eslint-disable-next-line no-unused-vars
   const [error, setError] = useState(null);
   const messagesEndRef = useRef(null);
 
@@ -26,19 +27,12 @@ const Chatbot = ({ userRole }) => {
 
     const userMessage = inputValue.trim();
     setInputValue('');
-    
-    // Add user message to chat
     setMessages(prev => [...prev, { text: userMessage, sender: 'user' }]);
-    
-    // Show loading indicator
     setIsLoading(true);
     setError(null);
-    
+
     try {
-      // Send message to backend
       const response = await sendMessage(userMessage);
-      
-      // Add bot response to chat
       setMessages(prev => [...prev, { text: response.response, sender: 'bot' }]);
     } catch (err) {
       console.error('Error getting chatbot response:', err);
@@ -79,15 +73,12 @@ const Chatbot = ({ userRole }) => {
       {/* Chat window */}
       {isOpen && (
         <div className="absolute bottom-16 right-0 w-80 sm:w-96 bg-white rounded-lg shadow-xl border border-gray-200 flex flex-col">
-          {/* Chat header */}
           <div className="bg-blue-600 text-white px-4 py-3 rounded-t-lg flex justify-between items-center">
             <h3 className="font-medium">HRMS Assistant</h3>
             <span className="text-xs bg-green-500 px-2 py-1 rounded-full">
               {userRole === 'admin' ? 'Admin' : userRole === 'hr' ? 'HR' : 'Employee'}
             </span>
           </div>
-          
-          {/* Messages container */}
           <div className="flex-1 p-4 overflow-y-auto max-h-80 space-y-3">
             {messages.map((message, index) => (
               <div 
@@ -120,8 +111,6 @@ const Chatbot = ({ userRole }) => {
             )}
             <div ref={messagesEndRef} />
           </div>
-          
-          {/* Input form */}
           <form onSubmit={handleSubmit} className="border-t border-gray-200 p-3 flex">
             <input
               type="text"

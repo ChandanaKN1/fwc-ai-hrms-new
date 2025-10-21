@@ -32,54 +32,73 @@ export default function HRLeaveRequestsPage() {
 
   return (
     <DashboardLayout>
-      <h1 className="text-2xl font-bold mb-6">Leave Requests</h1>
-      {requests.length === 0 ? (
-        <p>No leave requests found.</p>
-      ) : (
-        <table className="w-full text-left bg-gray-800 rounded">
-          <thead>
-            <tr>
-              <th className="p-2">Name</th>
-              <th className="p-2">Email</th>
-              <th className="p-2">Start Date</th>
-              <th className="p-2">End Date</th>
-              <th className="p-2">Reason</th>
-              <th className="p-2">Status</th>
-              <th className="p-2">Action</th>
-            </tr>
-          </thead>
-          <tbody>
-            {requests.map((req) => (
-              <tr key={req._id} className="border-t border-gray-700">
-                <td className="p-2">{req.employeeId?.name}</td>
-                <td className="p-2">{req.employeeId?.email}</td>
-                <td className="p-2">{new Date(req.startDate).toLocaleDateString()}</td>
-                <td className="p-2">{new Date(req.endDate).toLocaleDateString()}</td>
-                <td className="p-2">{req.reason}</td>
-                <td className="p-2">{req.status}</td>
-                <td className="p-2 space-x-2">
-                  {req.status === "Pending" && (
-                    <>
-                      <button
-                        onClick={() => handleAction(req._id, "Approved")}
-                        className="bg-green-600 px-2 py-1 rounded"
-                      >
-                        Approve
-                      </button>
-                      <button
-                        onClick={() => handleAction(req._id, "Rejected")}
-                        className="bg-red-600 px-2 py-1 rounded"
-                      >
-                        Reject
-                      </button>
-                    </>
-                  )}
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      )}
+      <div className="bg-gray-100 min-h-screen p-8 text-gray-800 font-inter">
+        <h1 className="text-3xl font-bold mb-8 text-center tracking-tight">
+          Leave Requests
+        </h1>
+
+        {requests.length === 0 ? (
+          <p className="text-center text-gray-500">No leave requests found.</p>
+        ) : (
+          <div className="overflow-x-auto max-w-5xl mx-auto">
+            <table className="w-full text-left border border-gray-300 bg-white rounded-xl shadow">
+              <thead className="bg-gray-50">
+                <tr>
+                  <th className="p-3">Name</th>
+                  <th className="p-3">Email</th>
+                  <th className="p-3">Start Date</th>
+                  <th className="p-3">End Date</th>
+                  <th className="p-3">Reason</th>
+                  <th className="p-3">Status</th>
+                  <th className="p-3 text-center">Action</th>
+                </tr>
+              </thead>
+              <tbody>
+                {requests.map((req) => (
+                  <tr
+                    key={req._id}
+                    className="border-t border-gray-200 hover:bg-gray-50 transition"
+                  >
+                    <td className="p-3">{req.employeeId?.name}</td>
+                    <td className="p-3">{req.employeeId?.email}</td>
+                    <td className="p-3">
+                      {new Date(req.startDate).toLocaleDateString()}
+                    </td>
+                    <td className="p-3">
+                      {new Date(req.endDate).toLocaleDateString()}
+                    </td>
+                    <td className="p-3">{req.reason}</td>
+                    <td className="p-3 font-medium text-gray-700">
+                      {req.status}
+                    </td>
+                    <td className="p-3 text-center">
+                      {req.status === "Pending" && (
+                        <div className="flex justify-center gap-2">
+                          {/* ✅ Approve Button */}
+                          <button
+                            onClick={() => handleAction(req._id, "Approved")}
+                            className="bg-[#1E3A8A] hover:bg-[#162c6a] text-white px-4 py-2 rounded-md text-sm font-medium transition duration-200 shadow-sm hover:shadow-md focus:outline-none"
+                          >
+                            Approve
+                          </button>
+
+                          {/* ❌ Reject Button */}
+                          <button
+                            onClick={() => handleAction(req._id, "Rejected")}
+                            className="border border-red-600 text-red-600 hover:bg-red-600 hover:text-white px-4 py-2 rounded-md text-sm font-medium transition duration-200 shadow-sm hover:shadow-md focus:outline-none"
+                          >
+                            Reject
+                          </button>
+                        </div>
+                      )}
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        )}
+      </div>
     </DashboardLayout>
   );
 }

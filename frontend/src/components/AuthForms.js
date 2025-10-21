@@ -13,7 +13,6 @@ function AuthForms() {
     role: "Employee",
   });
 
-  // ✅ Show message if redirected from first-time Google OAuth
   useEffect(() => {
     const params = new URLSearchParams(location.search);
     const firstTime = params.get("firstTime");
@@ -22,28 +21,19 @@ function AuthForms() {
     }
   }, [location]);
 
-  // 📝 Handle input change
   const handleChange = (e) =>
     setFormData({ ...formData, [e.target.name]: e.target.value });
 
-  // 🧠 Local Register/Login handler
   const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log("🚀 Sending data to backend:", formData);
-
     try {
       const endpoint = isLogin ? "/auth/login" : "/auth/register";
       const { data } = await API.post(endpoint, formData);
 
-      // ✅ Clear any old login data before setting new
       localStorage.clear();
-
-      // 🧠 Store fresh token & role & user
       localStorage.setItem("token", data.token);
       localStorage.setItem("role", data.role);
       localStorage.setItem("user", JSON.stringify(data));
-
-      // 🚀 Dispatch auth change so NavBar updates immediately
       window.dispatchEvent(new Event("authChange"));
 
       alert(`${isLogin ? "Login" : "Signup"} successful!`);
@@ -54,103 +44,120 @@ function AuthForms() {
     }
   };
 
-  // 🌐 Google Login handler
   const handleGoogleLogin = () => {
-    // This will redirect to backend which will eventually redirect back with token + role
     window.location.href = "http://localhost:5000/api/auth/google";
   };
 
   return (
-    <div style={styles.container}>
-      <h2 style={styles.title}>{isLogin ? "Login" : "Sign Up"}</h2>
-      <form onSubmit={handleSubmit} style={styles.form}>
-        {!isLogin && (
+    <div className="min-h-screen flex items-center justify-center bg-gray-50 px-4">
+      <div className="w-full max-w-md bg-white rounded-2xl shadow-xl p-8">
+        {/* Top Branding */}
+        <div className="text-center mb-6">
+          <h1 className="text-2xl font-bold text-gray-800 tracking-wide">
+            HRMS Portal
+          </h1>
+          <p className="text-gray-500 text-sm mt-1">
+            {isLogin ? "Welcome back! Please sign in." : "Create your account"}
+          </p>
+        </div>
+
+        {/* Form */}
+        <form onSubmit={handleSubmit} className="space-y-4">
+          {!isLogin && (
+            <input
+              type="text"
+              name="name"
+              placeholder="Full Name"
+              value={formData.name}
+              onChange={handleChange}
+              required
+              className="w-full p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-800"
+            />
+          )}
           <input
-            style={styles.input}
-            type="text"
-            name="name"
-            placeholder="Full Name"
-            value={formData.name}
+            type="email"
+            name="email"
+            placeholder="Email address"
+            value={formData.email}
             onChange={handleChange}
             required
+            className="w-full p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-800"
           />
-        )}
-        <input
-          style={styles.input}
-          type="email"
-          name="email"
-          placeholder="Email"
-          value={formData.email}
-          onChange={handleChange}
-          required
-        />
-        <input
-          style={styles.input}
-          type="password"
-          name="password"
-          placeholder="Password"
-          value={formData.password}
-          onChange={handleChange}
-          required
-        />
-        {!isLogin && (
-          <select
-            style={styles.input}
-            name="role"
-            value={formData.role}
+          <input
+            type="password"
+            name="password"
+            placeholder="Password"
+            value={formData.password}
             onChange={handleChange}
             required
+            className="w-full p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-800"
+          />
+          {!isLogin && (
+            <select
+              name="role"
+              value={formData.role}
+              onChange={handleChange}
+              required
+              className="w-full p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-800"
+            >
+              <option value="Employee">Employee</option>
+              <option value="HR">HR</option>
+              <option value="Admin">Admin</option>
+              <option value="Candidate">Candidate</option>
+            </select>
+          )}
+          <button
+            type="submit"
+            className="w-full bg-black hover:bg-gray-800 text-white py-3 rounded-lg font-medium transition"
           >
-            <option value="Employee">Employee</option>
-            <option value="HR">HR</option>
-            <option value="Admin">Admin</option>
-            <option value="Candidate">Candidate</option>
-          </select>
-        )}
-        <button style={styles.button} type="submit">
-          {isLogin ? "Login" : "Register"}
+            {isLogin ? "Login" : "Register"}
+          </button>
+        </form>
+
+        {/* Divider */}
+        <div className="flex items-center my-6">
+          <div className="flex-grow h-px bg-gray-300"></div>
+          <span className="mx-3 text-gray-400 text-sm">Or continue with</span>
+          <div className="flex-grow h-px bg-gray-300"></div>
+        </div>
+
+        {/* Google Login */}
+        <button
+          onClick={handleGoogleLogin}
+          className="w-full flex items-center justify-center gap-2 border border-gray-300 hover:bg-gray-100 py-3 rounded-lg transition"
+        >
+          <img
+            src="https://www.svgrepo.com/show/475656/google-color.svg"
+            alt="Google"
+            className="w-5 h-5"
+          />
+          <span className="text-gray-700 font-medium">Login with Google</span>
         </button>
-      </form>
 
-      <button style={styles.googleButton} onClick={handleGoogleLogin}>
-        Login with Google
-      </button>
-
-      <p style={styles.switchText} onClick={() => setIsLogin(!isLogin)}>
-        {isLogin
-          ? "New user? Register here"
-          : "Already have an account? Login here"}
-      </p>
+        {/* Toggle between Login and Register */}
+        <p
+          className="mt-6 text-center text-sm text-gray-600 cursor-pointer"
+          onClick={() => setIsLogin(!isLogin)}
+        >
+          {isLogin ? (
+            <>
+              New user?{" "}
+              <span className="text-black font-semibold hover:underline">
+                Sign up now
+              </span>
+            </>
+          ) : (
+            <>
+              Already have an account?{" "}
+              <span className="text-black font-semibold hover:underline">
+                Login here
+              </span>
+            </>
+          )}
+        </p>
+      </div>
     </div>
   );
 }
-
-const styles = {
-  container: { textAlign: "center", marginTop: "50px" },
-  form: { display: "inline-block", textAlign: "left", marginTop: "20px" },
-  input: {
-    display: "block",
-    margin: "10px 0",
-    padding: "8px 12px",
-    width: "250px",
-  },
-  button: {
-    padding: "10px 20px",
-    marginTop: "10px",
-    backgroundColor: "#61dafb",
-    border: "none",
-    cursor: "pointer",
-  },
-  googleButton: {
-    backgroundColor: "#DB4437",
-    color: "white",
-    border: "none",
-    padding: "10px 20px",
-    cursor: "pointer",
-    marginTop: "15px",
-  },
-  switchText: { color: "blue", marginTop: "20px", cursor: "pointer" },
-  title: { color: "#282c34" },
-};
 
 export default AuthForms;

@@ -17,24 +17,32 @@ export default function HREmployeeManagementPage() {
   }, []);
 
   return (
-    <div className="p-8 pt-16 bg-gray-900 min-h-screen text-white">
-      <h1 className="text-2xl font-bold mb-6">Employee Management</h1>
-      <table className="w-full text-left border border-gray-700 mb-6">
-        <thead>
-          <tr className="bg-gray-800">
-            <th className="p-2">Name</th>
-            <th className="p-2">Email</th>
-          </tr>
-        </thead>
-        <tbody>
-          {employees.map((emp) => (
-            <tr key={emp._id} className="border-t border-gray-700">
-              <td className="p-2">{emp.name}</td>
-              <td className="p-2">{emp.email}</td>
+    <div className="bg-gray-100 min-h-screen p-8 pt-20 text-gray-800 font-inter">
+      <h1 className="text-3xl font-bold mb-8 tracking-tight text-center">
+        Employee Management
+      </h1>
+
+      <div className="overflow-x-auto max-w-4xl mx-auto">
+        <table className="w-full text-left border border-gray-300 bg-white rounded-xl shadow">
+          <thead className="bg-gray-50">
+            <tr>
+              <th className="p-3 text-sm font-semibold text-gray-700">Name</th>
+              <th className="p-3 text-sm font-semibold text-gray-700">Email</th>
             </tr>
-          ))}
-        </tbody>
-      </table>
+          </thead>
+          <tbody>
+            {employees.map((emp) => (
+              <tr
+                key={emp._id}
+                className="border-t border-gray-200 hover:bg-gray-50 transition"
+              >
+                <td className="p-3">{emp.name}</td>
+                <td className="p-3">{emp.email}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
     </div>
   );
 }

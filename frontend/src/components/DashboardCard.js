@@ -1,20 +1,13 @@
-export default function DashboardCard({ title, description, buttonText, color, onClick }) {
-  const colorClasses = {
-    blue: "bg-blue-600 hover:bg-blue-700",
-    yellow: "bg-yellow-500 hover:bg-yellow-600",
-    green: "bg-green-600 hover:bg-green-700",
-    gray: "bg-gray-600 hover:bg-gray-700",
-  };
-
+export default function DashboardCard({ title, description, buttonText, onClick }) {
   return (
-    <div className="bg-gray-800 p-4 rounded-lg shadow-lg flex flex-col justify-between">
+    <div className="bg-white rounded-xl border border-gray-200 shadow-sm p-5 flex flex-col justify-between hover:shadow-md transition-all cursor-pointer h-[160px]">
       <div>
-        <h2 className="text-xl font-bold mb-2">{title}</h2>
-        <p className="text-gray-400 text-sm mb-4">{description}</p>
+        <h2 className="text-base font-semibold text-gray-800">{title}</h2>
+        <p className="text-xs text-gray-500 mt-1">{description}</p>
       </div>
       <button
         onClick={onClick}
-        className={`${colorClasses[color]} text-white font-semibold py-2 px-4 rounded transition-colors`}
+        className="mt-3 bg-indigo-600 hover:bg-indigo-700 text-white text-sm rounded-lg py-2 transition-all w-full shadow-sm hover:shadow-md"
       >
         {buttonText}
       </button>

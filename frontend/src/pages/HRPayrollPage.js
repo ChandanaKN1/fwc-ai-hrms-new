@@ -6,15 +6,13 @@ export default function HRPayrollPage() {
   const [showModal, setShowModal] = useState(false);
   const [selectedMonth, setSelectedMonth] = useState("");
   const [selectedYear, setSelectedYear] = useState("");
-
-  // ✅ Salary structure inputs
   const [baseSalary, setBaseSalary] = useState(0);
   const [allowance, setAllowance] = useState(0);
   const [deduction, setDeduction] = useState(0);
 
   const months = [
-    "January", "February", "March", "April", "May", "June",
-    "July", "August", "September", "October", "November", "December"
+    "January","February","March","April","May","June",
+    "July","August","September","October","November","December"
   ];
   const years = ["2023", "2024", "2025", "2026"];
 
@@ -33,7 +31,7 @@ export default function HRPayrollPage() {
 
   const generatePayroll = async () => {
     if (!selectedMonth || !selectedYear) {
-      alert("⚠️ Please select payroll month and year.");
+      alert("Please select payroll month and year.");
       return;
     }
 
@@ -58,9 +56,9 @@ export default function HRPayrollPage() {
       setStatus("Approved");
       setShowModal(false);
       fetchPayroll();
-      alert("✅ Payroll generated successfully");
+      alert("Payroll generated successfully");
     } else {
-      alert("❌ Failed to generate payroll");
+      alert("Failed to generate payroll");
     }
   };
 
@@ -73,33 +71,33 @@ export default function HRPayrollPage() {
 
     if (res.ok) {
       setStatus("Released");
-      alert("✅ Payroll released. Employees can now view payslips.");
+      alert("Payroll released. Employees can now view payslips.");
     } else {
-      alert("❌ Failed to release payroll");
+      alert("Failed to release payroll");
     }
   };
 
   return (
-    <div className="p-8 pt-16 bg-gray-900 min-h-screen text-white">
-      {/* Header & Status */}
-      <div className="flex justify-between mb-6">
-        <h1 className="text-2xl font-bold">Payroll Management (HR)</h1>
-        <div className="flex gap-3">
+    <div className="bg-gray-100 min-h-screen p-8 pt-20 text-gray-800 font-inter">
+      <div className="flex justify-between items-center mb-8 max-w-5xl mx-auto">
+        <h1 className="text-3xl font-bold tracking-tight">Payroll Management</h1>
+        <div className="flex gap-3 items-center">
           <span
-            className={`px-3 py-1 rounded-full ${
+            className={`px-4 py-1.5 rounded-lg text-sm font-medium border ${
               status === "Released"
-                ? "bg-green-600"
+                ? "bg-green-100 text-green-700 border-green-300"
                 : status === "Approved"
-                ? "bg-yellow-600"
-                : "bg-gray-600"
+                ? "bg-yellow-100 text-yellow-700 border-yellow-300"
+                : "bg-gray-100 text-gray-700 border-gray-300"
             }`}
           >
             {status}
           </span>
+
           {status === "Draft" && (
             <button
               onClick={() => setShowModal(true)}
-              className="bg-blue-600 px-4 py-2 rounded"
+              className="bg-[#1E3A8A] hover:bg-[#1a3578] text-white px-5 py-2 rounded-lg text-sm font-medium transition shadow-sm"
             >
               Generate Payroll
             </button>
@@ -107,7 +105,7 @@ export default function HRPayrollPage() {
           {status === "Approved" && (
             <button
               onClick={releasePayroll}
-              className="bg-green-600 px-4 py-2 rounded"
+              className="bg-[#1E3A8A] hover:bg-[#1a3578] text-white px-5 py-2 rounded-lg text-sm font-medium transition shadow-sm"
             >
               Approve & Release
             </button>
@@ -115,37 +113,37 @@ export default function HRPayrollPage() {
         </div>
       </div>
 
-      {/* Payroll table */}
-      <table className="w-full text-left border border-gray-700 mt-4">
-        <thead>
-          <tr className="bg-gray-800">
-            <th className="p-2">Employee</th>
-            <th className="p-2">Month</th>
-            <th className="p-2">Basic</th>
-            <th className="p-2">Allowance</th>
-            <th className="p-2">Deduction</th>
-            <th className="p-2">Net Pay</th>
-            {/* 🟢 Removed PDF Action column */}
-          </tr>
-        </thead>
-        <tbody>
-          {payrolls.map((p) => (
-            <tr key={p._id} className="border-t border-gray-700">
-              <td className="p-2">{p.employeeId?.name}</td>
-              <td className="p-2">{p.month}</td>
-              <td className="p-2">₹{p.baseSalary}</td>
-              <td className="p-2">₹{p.bonus}</td>
-              <td className="p-2">₹{p.deductions}</td>
-              <td className="p-2 text-green-400 font-bold">₹{p.netPay}</td>
+      <div className="overflow-x-auto max-w-5xl mx-auto">
+        <table className="w-full text-left border border-gray-300 bg-white shadow rounded-xl">
+          <thead className="bg-gray-50">
+            <tr>
+              <th className="p-3">Employee</th>
+              <th className="p-3">Month</th>
+              <th className="p-3">Basic</th>
+              <th className="p-3">Allowance</th>
+              <th className="p-3">Deduction</th>
+              <th className="p-3">Net Pay</th>
             </tr>
-          ))}
-        </tbody>
-      </table>
+          </thead>
+          <tbody>
+            {payrolls.map((p) => (
+              <tr key={p._id} className="border-t border-gray-200">
+                <td className="p-3">{p.employeeId?.name}</td>
+                <td className="p-3">{p.month}</td>
+                <td className="p-3">₹{p.baseSalary}</td>
+                <td className="p-3">₹{p.bonus}</td>
+                <td className="p-3">₹{p.deductions}</td>
+                <td className="p-3 text-green-600 font-semibold">₹{p.netPay}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
 
-      {/* Modal for payroll input */}
+      {/* Modal */}
       {showModal && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center">
-          <div className="bg-white text-black p-6 rounded-lg shadow-lg w-96">
+          <div className="bg-white text-black p-6 rounded-xl shadow-lg w-96">
             <h2 className="text-xl font-bold mb-4">Generate Payroll</h2>
 
             <select
@@ -186,7 +184,7 @@ export default function HRPayrollPage() {
               type="number"
               value={allowance}
               onChange={(e) => setAllowance(e.target.value)}
-              placeholder="Enter Allowance (if any)"
+              placeholder="Enter Allowance"
               className="p-2 rounded w-full mb-3 border"
             />
 
@@ -194,20 +192,20 @@ export default function HRPayrollPage() {
               type="number"
               value={deduction}
               onChange={(e) => setDeduction(e.target.value)}
-              placeholder="Enter Deductions (if any)"
+              placeholder="Enter Deductions"
               className="p-2 rounded w-full mb-3 border"
             />
 
             <div className="flex justify-end gap-2">
               <button
                 onClick={() => setShowModal(false)}
-                className="bg-gray-500 text-white px-4 py-2 rounded"
+                className="bg-gray-400 hover:bg-gray-500 text-white px-4 py-2 rounded-lg transition shadow-sm"
               >
                 Cancel
               </button>
               <button
                 onClick={generatePayroll}
-                className="bg-blue-600 text-white px-4 py-2 rounded"
+                className="bg-[#1E3A8A] hover:bg-[#1a3578] text-white px-5 py-2 rounded-lg font-medium transition shadow-sm"
               >
                 Generate
               </button>

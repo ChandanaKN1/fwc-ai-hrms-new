@@ -14,16 +14,20 @@ passport.use(
     async (accessToken, refreshToken, profile, done) => {
       try {
         const email = profile.emails[0].value;
-
-        // 🔹 Check if user exists
         let user = await User.findOne({ email });
 
         if (!user) {
-          // First time Google login → force them to register locally
-          return done(null, false, { message: "FIRST_TIME_USER" });
+          // ✅ First-time Google login → create new user automatically
+          user = await User.create({
+            name: profile.displayName || "New User",
+            email,
+            googleId: profile.id,
+            role: "Employee", // Default role — can be changed later
+          });
+          console.log("🆕 New user created from Google OAuth:", email);
         }
 
-        // 🔸 Update googleId if missing
+        // ✅ If googleId missing for existing user, update it
         if (!user.googleId) {
           user.googleId = profile.id;
           await user.save();

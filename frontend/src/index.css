@@ -1,12 +1,11 @@
-/* =========================
-   🌟 Tailwind Base Imports
-========================= */
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+
 /* =========================
-   🧭 Global Reset
+   🌟 Global Reset & Typography
 ========================= */
 * {
   margin: 0;
@@ -15,9 +14,9 @@
 }
 
 body {
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
-    sans-serif;
+  body {
+  font-family: 'Inter', sans-serif;
+}
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   background-color: #f8fafc;
@@ -31,25 +30,64 @@ body.dark {
 }
 
 /* =========================
-   🌈 Glass Effect Utilities
+   🌈 Card Component
 ========================= */
-.glass {
-  background: rgba(255, 255, 255, 0.1);
-  backdrop-filter: blur(10px);
-  border: 1px solid rgba(255, 255, 255, 0.2);
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+.card {
+  background: #ffffff;
+  border: 1px solid #e5e7eb;
+  border-radius: 0.75rem;
+  box-shadow: 0 4px 20px -5px rgba(0, 0, 0, 0.05);
+  padding: 1.5rem;
+  transition: all 0.4s ease;
+  position: relative;
+  overflow: hidden;
 }
 
-.glass-dark {
-  background: rgba(31, 41, 55, 0.2);
-  backdrop-filter: blur(10px);
-  border: 1px solid rgba(55, 65, 81, 0.4);
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+.card:hover {
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.12);
+  transform: translateY(-4px);
+}
+
+.card::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, rgba(59,130,246,0.05), rgba(99,102,241,0.05));
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.card:hover::after {
+  opacity: 1;
 }
 
 /* =========================
-   🧭 Button Components
+   🌿 Button Style
 ========================= */
+button {
+  transition: all 0.3s ease;
+}
+
+button:hover {
+  transform: translateY(-1px);
+}
+
+.btn-outline {
+  border: 1px solid #cbd5e1;
+  padding: 0.5rem 1rem;
+  border-radius: 0.5rem;
+  font-weight: 500;
+  background-color: white;
+  color: #1e293b;
+}
+
+.btn-outline:hover {
+  background: linear-gradient(135deg, #3b82f6, #1d4ed8);
+  color: white;
+  border-color: transparent;
+  box-shadow: 0 4px 10px rgba(59, 130, 246, 0.3);
+}
+
 .btn-primary {
   background: linear-gradient(135deg, #3b82f6, #1d4ed8);
   color: white;
@@ -59,7 +97,6 @@ body.dark {
   border: none;
   cursor: pointer;
   transition: all 0.2s ease;
-  display: inline-block;
 }
 
 .btn-primary:hover {
@@ -68,117 +105,38 @@ body.dark {
   box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
 }
 
-.btn-secondary {
-  background: #e2e8f0;
-  color: #1e293b;
-  font-weight: 500;
-  padding: 0.5rem 1rem;
-  border-radius: 0.5rem;
-  border: none;
-  cursor: pointer;
-  transition: all 0.2s ease;
-}
-
-.btn-secondary:hover {
-  background: #cbd5e1;
-  transform: translateY(-1px);
-}
-
-.dark .btn-secondary {
-  background: #374151;
-  color: #f1f5f9;
-}
-
-.dark .btn-secondary:hover {
-  background: #4b5563;
-}
-
 /* =========================
-   🧭 Card Component
+   ✨ Animations & Transitions
 ========================= */
-.card {
-  background: white;
-  border-radius: 0.75rem;
-  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
-  border: 1px solid #e2e8f0;
-  padding: 1.5rem;
-  transition: all 0.3s ease;
-}
-
-.card:hover {
-  box-shadow: 0 10px 25px -3px rgba(0, 0, 0, 0.15);
-  transform: translateY(-2px);
-}
-
-.dark .card {
-  background: #1e293b;
-  border-color: #374151;
-}
-
-/* =========================
-   ✨ Input Field Styles
-========================= */
-.input-field {
-  width: 100%;
-  padding: 0.75rem 1rem;
-  border-radius: 0.5rem;
-  border: 1px solid #d1d5db;
-  background: white;
-  color: #1e293b;
-  transition: all 0.2s ease;
-}
-
-.input-field:focus {
-  outline: none;
-  border-color: #3b82f6;
-  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
-}
-
-.dark .input-field {
-  background: #374151;
-  border-color: #4b5563;
-  color: #f1f5f9;
-}
-
-.dark .input-field:focus {
-  border-color: #60a5fa;
-  box-shadow: 0 0 0 3px rgba(96, 165, 250, 0.1);
-}
-
-/* =========================
-   🪄 Animations & Transitions
-========================= */
-.transition-all {
-  transition: all 0.3s ease;
-}
-
-.hover\:scale-105:hover {
-  transform: scale(1.05);
-}
-
 .animate-fade-in {
   animation: fadeIn 0.5s ease-in-out;
 }
 
 @keyframes fadeIn {
-  from {
+  0% {
     opacity: 0;
+    transform: translateY(10px);
   }
-  to {
+  100% {
     opacity: 1;
+    transform: translateY(0);
   }
 }
 
-.animate-spin {
-  animation: spin 1s linear infinite;
+/* Pulse effect for highlight */
+.animate-pulse-border {
+  animation: pulseBorder 1.8s infinite;
 }
 
-@keyframes spin {
-  from {
-    transform: rotate(0deg);
+@keyframes pulseBorder {
+  0% {
+    box-shadow: 0 0 0 0 rgba(59, 130, 246, 0.4);
   }
-  to {
-    transform: rotate(360deg);
+  70% {
+    box-shadow: 0 0 0 10px rgba(59, 130, 246, 0);
+  }
+  100% {
+    box-shadow: 0 0 0 0 rgba(59, 130, 246, 0);
   }
 }
 
@@ -202,14 +160,13 @@ body.dark {
   background: #a8a8a8;
 }
 
-.dark ::-webkit-scrollbar-track {
-  background: #374151;
+/* =========================
+   🧭 Navbar Hover
+========================= */
+nav ul li {
+  transition: color 0.2s ease;
 }
 
-.dark ::-webkit-scrollbar-thumb {
-  background: #6b7280;
-}
-
-.dark ::-webkit-scrollbar-thumb:hover {
-  background: #9ca3af;
+nav ul li:hover {
+  color: #3b82f6;
 }

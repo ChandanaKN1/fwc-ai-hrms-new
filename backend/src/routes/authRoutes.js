@@ -1,6 +1,7 @@
 import express from "express";
 import passport from "passport";
 import jwt from "jsonwebtoken";
+import User from "../models/User.js";
 import { registerUser, loginUser, verifyToken } from "../controllers/authController.js";
 import { protect } from "../middlewares/authMiddleware.js";
 
@@ -24,7 +25,6 @@ router.get(
       expiresIn: "1d",
     });
 
-    // Redirect to frontend with token in URL
     res.redirect(`http://localhost:3000/dashboard?token=${token}`);
   }
 );
@@ -34,32 +34,6 @@ router.get("/user", protect, (req, res) => {
   if (req.user) return res.json(req.user);
   res.status(401).json({ message: "Unauthorized" });
 });
-
-router.post("/register", async (req, res) => {
-  try {
-    const { name, email, password, role, department, designation, baseSalary, joinDate } = req.body;
-
-    const existingUser = await User.findOne({ email });
-    if (existingUser) return res.status(400).json({ message: "User already exists" });
-
-    const user = await User.create({
-      name,
-      email,
-      password,
-      role: role || "Employee",
-      department: department || "Not Assigned",
-      designation: designation || "Not Assigned",
-      baseSalary: baseSalary || 30000,
-      joinDate: joinDate || new Date(),
-    });
-
-    res.json({ message: "✅ Registration successful", user });
-  } catch (err) {
-    console.error(err);
-    res.status(500).json({ message: "Registration failed" });
-  }
-});
-
 
 /* 🚪 Logout */
 router.get("/logout", (req, res) => {

@@ -1,6 +1,7 @@
 import React from "react";
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import { BrowserRouter as Router, Routes, Route, useLocation } from "react-router-dom";
 import NavBar from "./components/NavBar";
+import Footer from "./components/Footer";  // ✅ Added Footer
 
 import AuthForms from "./components/AuthForms";
 import DashboardRedirect from "./pages/DashboardRedirect";
@@ -32,173 +33,174 @@ import HRProjectsPage from "./pages/HRProjectsPage";
 import EmployeeProjectsPage from "./pages/EmployeeProjectsPage";
 import ResumeScreeningPage from "./pages/ResumeScreeningPage";
 
+function LayoutWrapper({ children }) {
+  const location = useLocation();
+  const hideNavAndFooterRoutes = ["/", "/register"]; // 👈 No NavBar or Footer on Login & Register
+
+  return (
+    <>
+      {!hideNavAndFooterRoutes.includes(location.pathname) && <NavBar />}
+      {children}
+      {!hideNavAndFooterRoutes.includes(location.pathname) && <Footer />} {/* ✅ Footer added here */}
+    </>
+  );
+}
+
 export default function App() {
   return (
     <Router>
       <ChatbotProvider>
-        <NavBar />
-        <Routes>
-        {/* ==============================
-           AUTHENTICATION
-        ============================== */}
-        <Route path="/" element={<AuthForms />} />
-        <Route path="/dashboard" element={<DashboardRedirect />} />
+        <LayoutWrapper>
+          <Routes>
+            {/* AUTH */}
+            <Route path="/" element={<AuthForms />} />
+            <Route path="/dashboard" element={<DashboardRedirect />} />
 
-        {/* ==============================
-           ADMIN DASHBOARD
-        ============================== */}
-        <Route
-          path="/admin"
-          element={
-            <ProtectedRoute>
-              <AdminDashboard />
-            </ProtectedRoute>
-          }
-        />
+            {/* ADMIN */}
+            <Route
+              path="/admin"
+              element={
+                <ProtectedRoute>
+                  <AdminDashboard />
+                </ProtectedRoute>
+              }
+            />
 
-        {/* ==============================
-           HR DASHBOARD
-        ============================== */}
-        <Route
-          path="/hr"
-          element={
-            <ProtectedRoute>
-              <HRDashboard />
-            </ProtectedRoute>
-          }
-        />
-        <Route
-          path="/hr/applications"
-          element={
-            <ProtectedRoute>
-              <ViewApplications />
-            </ProtectedRoute>
-          }
-        />
-        <Route
-          path="/hr/attendance"
-          element={
-            <ProtectedRoute>
-              <HRAttendancePage />
-            </ProtectedRoute>
-          }
-        />
-        <Route
-          path="/hr/employee-management"
-          element={
-            <ProtectedRoute>
-              <HREmployeeManagementPage />
-            </ProtectedRoute>
-          }
-        />
-        <Route
-          path="/hr/feedback"
-          element={
-            <ProtectedRoute>
-              <HRFeedbackPage />
-            </ProtectedRoute>
-          }
-        />
-        <Route
-          path="/hr/leave"
-          element={
-            <ProtectedRoute>
-              <HRLeaveRequestsPage />
-            </ProtectedRoute>
-          }
-        />
-        <Route
-          path="/hr/payroll"
-          element={
-            <ProtectedRoute>
-              <HRPayrollPage />
-            </ProtectedRoute>
-          }
-        />
-        {/* 🆕 HR: Projects */}
-        <Route
-  path="/hr/projects"
-  element={
-    <ProtectedRoute>
-      <HRProjectsPage />
-    </ProtectedRoute>
-  }
-/>
-        {/* 🆕 HR: Resume Screening */}
-        <Route
-          path="/hr/resume-screening"
-          element={
-            <ProtectedRoute>
-              <ResumeScreeningPage />
-            </ProtectedRoute>
-          }
-        />
+            {/* HR */}
+            <Route
+              path="/hr"
+              element={
+                <ProtectedRoute>
+                  <HRDashboard />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/hr/applications"
+              element={
+                <ProtectedRoute>
+                  <ViewApplications />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/hr/attendance"
+              element={
+                <ProtectedRoute>
+                  <HRAttendancePage />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/hr/employee-management"
+              element={
+                <ProtectedRoute>
+                  <HREmployeeManagementPage />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/hr/feedback"
+              element={
+                <ProtectedRoute>
+                  <HRFeedbackPage />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/hr/leave"
+              element={
+                <ProtectedRoute>
+                  <HRLeaveRequestsPage />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/hr/payroll"
+              element={
+                <ProtectedRoute>
+                  <HRPayrollPage />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/hr/projects"
+              element={
+                <ProtectedRoute>
+                  <HRProjectsPage />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/hr/resume-screening"
+              element={
+                <ProtectedRoute>
+                  <ResumeScreeningPage />
+                </ProtectedRoute>
+              }
+            />
 
-        {/* ==============================
-           EMPLOYEE DASHBOARD
-        ============================== */}
-        <Route
-          path="/employee"
-          element={
-            <ProtectedRoute>
-              <EmployeeDashboard />
-            </ProtectedRoute>
-          }
-        />
-        <Route
-          path="/employee/attendance"
-          element={
-            <ProtectedRoute>
-              <EmployeeAttendancePage />
-            </ProtectedRoute>
-          }
-        />
-        <Route
-          path="/employee/payroll"
-          element={
-            <ProtectedRoute>
-              <EmployeePayrollPage />
-            </ProtectedRoute>
-          }
-        />
-        <Route
-          path="/employee/leave"
-          element={
-            <ProtectedRoute>
-              <EmployeeLeavePage />
-            </ProtectedRoute>
-          }
-        />
-        <Route
-          path="/employee/feedback"
-          element={
-            <ProtectedRoute>
-              <EmployeeFeedbackPage />
-            </ProtectedRoute>
-          }
-        />
-        {/* 🆕 Employee: Projects */}
-        <Route
-          path="/employee/projects"
-          element={
-            <ProtectedRoute>
-              <EmployeeProjectsPage />
-            </ProtectedRoute>
-          }
-        />
+            {/* EMPLOYEE */}
+            <Route
+              path="/employee"
+              element={
+                <ProtectedRoute>
+                  <EmployeeDashboard />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/employee/attendance"
+              element={
+                <ProtectedRoute>
+                  <EmployeeAttendancePage />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/employee/payroll"
+              element={
+                <ProtectedRoute>
+                  <EmployeePayrollPage />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/employee/leave"
+              element={
+                <ProtectedRoute>
+                  <EmployeeLeavePage />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/employee/feedback"
+              element={
+                <ProtectedRoute>
+                  <EmployeeFeedbackPage />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/employee/projects"
+              element={
+                <ProtectedRoute>
+                  <EmployeeProjectsPage />
+                </ProtectedRoute>
+              }
+            />
 
-        {/* ==============================
-           CANDIDATE DASHBOARD
-        ============================== */}
-        <Route
-          path="/candidate"
-          element={
-            <ProtectedRoute>
-              <CandidateDashboard />
-            </ProtectedRoute>
-          }
-        />
-      </Routes>
+            {/* CANDIDATE */}
+            <Route
+              path="/candidate"
+              element={
+                <ProtectedRoute>
+                  <CandidateDashboard />
+                </ProtectedRoute>
+              }
+            />
+          </Routes>
+        </LayoutWrapper>
       </ChatbotProvider>
     </Router>
   );

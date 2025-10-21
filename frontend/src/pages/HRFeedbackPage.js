@@ -16,21 +16,39 @@ export default function HRFeedbackPage() {
   }, []);
 
   return (
-    <div className="p-8 pt-16 bg-gray-900 min-h-screen text-white">
-      <h1 className="text-2xl font-bold mb-6">Employee Feedback</h1>
+    <div className="bg-gray-100 min-h-screen p-8 pt-20 text-gray-800 font-inter">
+      <h1 className="text-3xl font-bold mb-8 tracking-tight text-center">
+        Employee Feedback
+      </h1>
       {feedbacks.length === 0 ? (
-        <p>No feedback available</p>
+        <p className="text-center text-gray-500">No feedback available.</p>
       ) : (
-        <div className="space-y-4">
+        <div className="max-w-4xl mx-auto space-y-4">
           {feedbacks.map((f) => (
-            <div key={f._id} className="bg-gray-800 p-4 rounded-lg">
-              <p className="font-semibold text-lg">{f.employeeId?.name}</p>
-              <p className="text-sm text-gray-400 mb-2">{f.employeeId?.email}</p>
-              <p className="text-lg">{f.message}</p>
-              <p className="text-yellow-400 mt-2">Rating: {f.rating} ⭐</p>
-              <p className="text-sm text-gray-400">
-                {new Date(f.createdAt).toLocaleString()}
-              </p>
+            <div
+              key={f._id}
+              className="bg-white rounded-xl shadow-md p-5 border border-gray-200 hover:shadow-lg transition"
+            >
+              <div className="flex items-center justify-between mb-2">
+                <div>
+                  <p className="font-semibold text-lg">{f.employeeId?.name}</p>
+                  <p className="text-sm text-gray-500">
+                    {f.employeeId?.email}
+                  </p>
+                </div>
+                <p className="text-sm text-gray-400">
+                  {new Date(f.createdAt).toLocaleString()}
+                </p>
+              </div>
+
+              <p className="text-base mb-3">{f.message}</p>
+
+              <div className="flex items-center gap-2">
+                <span className="text-[#1E3A8A] font-semibold text-base">
+                  Rating: {f.rating}
+                </span>
+                <span className="text-yellow-400 text-xl">⭐</span>
+              </div>
             </div>
           ))}
         </div>
