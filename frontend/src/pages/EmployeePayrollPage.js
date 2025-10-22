@@ -18,7 +18,8 @@ export default function EmployeePayrollPage() {
       }
 
       try {
-        const res = await fetch("http://localhost:5000/api/hr/payroll/employee", {
+        const BASE = process.env.REACT_APP_API_URL || "http://localhost:5000";
+        const res = await fetch(`${BASE}/api/hr/payroll/employee`, {
           headers: { Authorization: `Bearer ${token}` },
         });
 
