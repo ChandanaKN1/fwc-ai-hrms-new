@@ -1,6 +1,9 @@
-flask 
-PyPDF2 
+Flask
+flask-cors
+PyPDF2
 docx2txt
 sentence-transformers
 torch
-# smtplib
+spacy
+python-dotenv
+pdfminer.six
