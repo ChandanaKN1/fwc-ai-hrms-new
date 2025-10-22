@@ -11,7 +11,8 @@ export default function EmployeeLeavePage() {
   const submitLeave = async () => {
     try {
       const token = localStorage.getItem("token");
-      const res = await fetch("http://localhost:5000/api/employee/leave", {
+      const BASE = process.env.REACT_APP_API_URL || "http://localhost:5000";
+      const res = await fetch(`${BASE}/api/employee/leave`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -39,7 +40,8 @@ export default function EmployeeLeavePage() {
   const fetchHistory = async () => {
     try {
       const token = localStorage.getItem("token");
-      const res = await fetch("http://localhost:5000/api/employee/leave", {
+      const BASE = process.env.REACT_APP_API_URL || "http://localhost:5000";
+      const res = await fetch(`${BASE}/api/employee/leave`, {
         headers: { Authorization: `Bearer ${token}` },
       });
       const data = await res.json();

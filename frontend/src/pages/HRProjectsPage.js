@@ -10,7 +10,8 @@ export default function HRProjectsPage() {
 
   const fetchProjects = async () => {
     const token = localStorage.getItem("token");
-    const res = await fetch("http://localhost:5000/api/projects", {
+    const BASE = process.env.REACT_APP_API_URL || "http://localhost:5000";
+    const res = await fetch(`${BASE}/api/projects`, {
       headers: { Authorization: `Bearer ${token}` },
     });
     const data = await res.json();
@@ -20,7 +21,8 @@ export default function HRProjectsPage() {
   const addProject = async (e) => {
     e.preventDefault();
     const token = localStorage.getItem("token");
-    await fetch("http://localhost:5000/api/projects", {
+    const BASE = process.env.REACT_APP_API_URL || "http://localhost:5000";
+    await fetch(`${BASE}/api/projects`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -34,7 +36,8 @@ export default function HRProjectsPage() {
 
   const updateStatus = async (id, status) => {
     const token = localStorage.getItem("token");
-    await fetch(`http://localhost:5000/api/projects/${id}`, {
+    const BASE = process.env.REACT_APP_API_URL || "http://localhost:5000";
+    await fetch(`${BASE}/api/projects/${id}`, {
       method: "PATCH",
       headers: {
         "Content-Type": "application/json",

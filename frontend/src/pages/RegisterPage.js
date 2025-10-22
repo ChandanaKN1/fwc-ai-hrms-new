@@ -7,8 +7,8 @@ export default function RegisterPage() {
     e.preventDefault();
 
     const body = { role };
-
-    const res = await fetch("http://localhost:5000/api/auth/register", {
+    const BASE = process.env.REACT_APP_API_URL || "http://localhost:5000";
+    const res = await fetch(`${BASE}/api/auth/register`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(body),
@@ -69,9 +69,10 @@ export default function RegisterPage() {
         {/* Google Login Button - Indigo */}
         <button
           type="button"
-          onClick={() =>
-            (window.location.href = "http://localhost:5000/api/auth/google")
-          }
+          onClick={() => {
+            const BASE = process.env.REACT_APP_API_URL || "http://localhost:5000";
+            window.location.href = `${BASE}/api/auth/google`;
+          }}
           className="w-full flex items-center justify-center gap-2 bg-[#1E3A8A] hover:bg-[#162c6a] text-white py-3 rounded-lg font-medium transition-all shadow-md hover:shadow-lg"
         >
           <img

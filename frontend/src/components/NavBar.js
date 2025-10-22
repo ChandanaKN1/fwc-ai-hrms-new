@@ -1,16 +1,18 @@
 import React, { useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
+import axios from "axios";
 
 export default function NavBar() {
   const [loggedIn, setLoggedIn] = useState(false);
   const location = useLocation();
 
   const checkLogin = () => {
+    const BASE = process.env.REACT_APP_API_URL || "http://localhost:5000";
     const token = localStorage.getItem("token");
     if (token) {
       setLoggedIn(true);
     } else {
-      fetch("http://localhost:5000/api/auth/user", { credentials: "include" })
+      fetch(`${BASE}/api/auth/user`, { credentials: "include" })
         .then((res) => setLoggedIn(res.ok))
         .catch(() => setLoggedIn(false));
     }
@@ -23,9 +25,12 @@ export default function NavBar() {
   }, []);
 
   const handleLogout = async () => {
+    const BASE = process.env.REACT_APP_API_URL || "http://localhost:5000";
     localStorage.removeItem("token");
     localStorage.removeItem("role");
-    await fetch("http://localhost:5000/api/auth/logout", { credentials: "include" });
+    try {
+      await axios.get(`${BASE}/api/auth/logout`, { withCredentials: true });
+    } catch {}
     setLoggedIn(false);
     window.dispatchEvent(new Event("authChange"));
     window.location.href = "/";
