@@ -1,8 +1,10 @@
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import DashboardCard from "../components/DashboardCard";
 import { getAllJobs } from "../api/api";
 
 export default function CandidateDashboard() {
+  const navigate = useNavigate();
   const [jobs, setJobs] = useState([]);
   const [showJobs, setShowJobs] = useState(false);
   const [resumeFiles, setResumeFiles] = useState({}); // store file per job ID
@@ -87,6 +89,7 @@ export default function CandidateDashboard() {
       description: "Take mock interviews with AI interviewer and get feedback.",
       buttonText: "Start AI Interview",
       color: "yellow",
+      onClick: () => navigate("/candidate/ai_interview"),
     },
     {
       title: "Discover Jobs",

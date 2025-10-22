@@ -32,6 +32,7 @@ import HRPayrollPage from "./pages/HRPayrollPage";
 import HRProjectsPage from "./pages/HRProjectsPage";
 import EmployeeProjectsPage from "./pages/EmployeeProjectsPage";
 import ResumeScreeningPage from "./pages/ResumeScreeningPage";
+import AiInterviewPage from "./pages/AiInterviewPage";
 
 function LayoutWrapper({ children }) {
   const location = useLocation();
@@ -196,6 +197,14 @@ export default function App() {
               element={
                 <ProtectedRoute>
                   <CandidateDashboard />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/candidate/ai_interview"
+              element={
+                <ProtectedRoute>
+                  <AiInterviewPage />
                 </ProtectedRoute>
               }
             />
