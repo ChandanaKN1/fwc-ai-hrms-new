@@ -123,7 +123,7 @@ export default function HRDashboard() {
       title: "Interviews",
       description:
         "Schedule and manage interviews, monitor slots, and keep track of candidate progress seamlessly.",
-      onClick: () => alert("🚧 Coming soon"),
+      onClick: () => navigate("/hr/interviews"),
     },
     {
       title: "View Applications",

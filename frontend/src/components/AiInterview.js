@@ -152,7 +152,7 @@ const AiInterview = () => {
     }
   };
 
-  const finishInterview = async (sid = sessionId) => {
+  const finishInterview = useCallback(async (sid = sessionId) => {
     if (!sid) return;
     setLoading(true);
     setError('');
@@ -170,7 +170,7 @@ const AiInterview = () => {
     } finally {
       setLoading(false);
     }
-  };
+  }, [sessionId]);
 
   return (
     <div className="bg-white rounded-lg p-8 shadow max-w-3xl mx-auto">

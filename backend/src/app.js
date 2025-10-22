@@ -20,6 +20,7 @@ import chatbotRoutes from "./routes/chatbotRoutes.js"; // ✅ Chatbot routes
 import resumeRoutes from "./routes/resumeRoutes.js"; // ✅ Resume screening routes
 import { protect } from "./middlewares/authMiddleware.js"; // ✅ Import protect middleware
 import projectRoutes from "./routes/projectRoutes.js";
+import interviewRoutes from "./routes/interviewRoutes.js";
 
 const app = express();
 
@@ -81,6 +82,7 @@ app.use("/api/hr/payroll", payrollRoutes); // ✅ Added Payroll route
 app.use("/api/projects", projectRoutes);
 app.use("/api/chatbot", chatbotRoutes); // ✅ Chatbot route
 app.use("/api/resume", resumeRoutes); // ✅ Resume screening route
+app.use("/api/interviews", interviewRoutes); // ✅ Interviews scheduling routes
 
 /* --------------------------------------------------
    7. 🧪 Debug Route — Check Current Logged-in User (Now uses JWT)
@@ -95,11 +97,5 @@ app.get("/api/auth/user", protect, (req, res) => {
 app.get("/", (req, res) => {
   res.send("🚀 HRMS Backend running successfully!");
 });
-
-/* --------------------------------------------------
-   9. 🚀 Start Server
---------------------------------------------------- */
-const PORT = process.env.PORT || 5000;
-app.listen(PORT, () => console.log(`✅ Server running on port ${PORT}`));
 
 export default app;

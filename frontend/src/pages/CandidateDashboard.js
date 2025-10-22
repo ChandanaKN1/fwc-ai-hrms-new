@@ -82,6 +82,12 @@ export default function CandidateDashboard() {
 
   const features = [
     {
+      title: "My Interviews",
+      description:
+        "View your scheduled interviews and join the live interview room.",
+      onClick: () => navigate("/candidate/interviews"),
+    },
+    {
       title: "AI Interview",
       description: "Take mock interviews with AI interviewer and get feedback.",
       buttonText: "Start AI Interview",
