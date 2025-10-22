@@ -25,7 +25,8 @@ const CandidateOnboardingPageInner = () => {
     const load = async () => {
       try {
         const token = localStorage.getItem('token');
-        const res = await fetch('http://localhost:5000/api/auth/user', {
+        const BASE = process.env.REACT_APP_API_URL || 'http://localhost:5000';
+        const res = await fetch(`${BASE}/api/auth/user`, {
           headers: { Authorization: `Bearer ${token}` },
         });
         if (!res.ok) throw new Error('Unauthorized');

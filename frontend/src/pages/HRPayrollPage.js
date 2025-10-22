@@ -22,7 +22,8 @@ export default function HRPayrollPage() {
 
   const fetchPayroll = async () => {
     const token = localStorage.getItem("token");
-    const res = await fetch("http://localhost:5000/api/hr/payroll", {
+    const BASE = process.env.REACT_APP_API_URL || "http://localhost:5000";
+    const res = await fetch(`${BASE}/api/hr/payroll`, {
       headers: { Authorization: `Bearer ${token}` },
     });
     const data = await res.json();
@@ -43,7 +44,8 @@ export default function HRPayrollPage() {
       deduction: Number(deduction),
     };
 
-    const res = await fetch("http://localhost:5000/api/hr/payroll/generate", {
+    const BASE = process.env.REACT_APP_API_URL || "http://localhost:5000";
+    const res = await fetch(`${BASE}/api/hr/payroll/generate`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -64,7 +66,8 @@ export default function HRPayrollPage() {
 
   const releasePayroll = async () => {
     const token = localStorage.getItem("token");
-    const res = await fetch("http://localhost:5000/api/hr/payroll/release", {
+    const BASE = process.env.REACT_APP_API_URL || "http://localhost:5000";
+    const res = await fetch(`${BASE}/api/hr/payroll/release`, {
       method: "PATCH",
       headers: { Authorization: `Bearer ${token}` },
     });

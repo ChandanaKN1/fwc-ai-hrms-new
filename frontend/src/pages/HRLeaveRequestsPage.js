@@ -6,7 +6,8 @@ export default function HRLeaveRequestsPage() {
 
   const fetchRequests = async () => {
     const token = localStorage.getItem("token");
-    const res = await fetch("http://localhost:5000/api/hr/leave", {
+    const BASE = process.env.REACT_APP_API_URL || "http://localhost:5000";
+    const res = await fetch(`${BASE}/api/hr/leave`, {
       headers: { Authorization: `Bearer ${token}` },
     });
     const data = await res.json();
@@ -15,7 +16,8 @@ export default function HRLeaveRequestsPage() {
 
   const handleAction = async (id, status) => {
     const token = localStorage.getItem("token");
-    await fetch(`http://localhost:5000/api/hr/leave/${id}`, {
+    const BASE = process.env.REACT_APP_API_URL || "http://localhost:5000";
+    await fetch(`${BASE}/api/hr/leave/${id}`, {
       method: "PATCH",
       headers: {
         "Content-Type": "application/json",
