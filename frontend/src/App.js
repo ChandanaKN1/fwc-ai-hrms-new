@@ -36,6 +36,8 @@ import AiInterviewPage from "./pages/AiInterviewPage";
 import HRInterviewsPage from "./pages/HRInterviewsPage";
 import InterviewRoomPage from "./pages/InterviewRoomPage";
 import CandidateInterviewsPage from "./pages/CandidateInterviewsPage";
+import HROnboardingPage from "./pages/HROnboardingPage";
+import CandidateOnboardingPage from "./pages/CandidateOnboardingPage";
 
 function LayoutWrapper({ children }) {
   const location = useLocation();
@@ -144,6 +146,14 @@ export default function App() {
               }
             />
             <Route
+              path="/hr/onboarding"
+              element={
+                <ProtectedRoute>
+                  <HROnboardingPage />
+                </ProtectedRoute>
+              }
+            />
+            <Route
               path="/hr/resume-screening"
               element={
                 <ProtectedRoute>
@@ -208,6 +218,14 @@ export default function App() {
               element={
                 <ProtectedRoute>
                   <CandidateDashboard />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/candidate/onboarding"
+              element={
+                <ProtectedRoute>
+                  <CandidateOnboardingPage />
                 </ProtectedRoute>
               }
             />

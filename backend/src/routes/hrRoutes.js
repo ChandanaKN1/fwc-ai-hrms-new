@@ -193,3 +193,68 @@ router.get("/feedback", protect, authorizeRoles("HR", "Admin"), async (req, res)
 });
 
 export default router;
+
+/* =========================
+   Onboarding Management
+   ========================= */
+// 📋 Fetch candidates for onboarding
+router.get(
+  "/onboarding",
+  protect,
+  authorizeRoles("HR", "Admin"),
+  async (req, res) => {
+    try {
+      const candidates = await User.find({ role: "Candidate" }).select(
+        "name email onboardingStatus"
+      );
+      res.json(candidates);
+    } catch (err) {
+      console.error("Onboarding list error:", err);
+      res.status(500).json({ message: "Failed to fetch onboarding list" });
+    }
+  }
+);
+
+// 🚀 Start onboarding for a candidate
+router.post(
+  "/onboarding/:id/trigger",
+  protect,
+  authorizeRoles("HR", "Admin"),
+  async (req, res) => {
+    try {
+      const { id } = req.params;
+      const updated = await User.findByIdAndUpdate(
+        id,
+        { onboardingStatus: "In Progress" },
+        { new: true }
+      ).select("name email onboardingStatus");
+      if (!updated) return res.status(404).json({ message: "Candidate not found" });
+      res.json({ message: "Onboarding started", candidate: updated });
+    } catch (err) {
+      console.error("Onboarding trigger error:", err);
+      res.status(500).json({ message: "Failed to start onboarding" });
+    }
+  }
+);
+
+// ⏪ Withdraw onboarding back to Pending
+router.post(
+  "/onboarding/:id/withdraw",
+  protect,
+  authorizeRoles("HR", "Admin"),
+  async (req, res) => {
+    try {
+      const { id } = req.params;
+      const updated = await User.findByIdAndUpdate(
+        id,
+        { onboardingStatus: "Pending" },
+        { new: true }
+      ).select("name email onboardingStatus");
+      if (!updated) return res.status(404).json({ message: "Candidate not found" });
+      res.json({ message: "Onboarding withdrawn", candidate: updated });
+    } catch (err) {
+      console.error("Onboarding withdraw error:", err);
+      res.status(500).json({ message: "Failed to withdraw onboarding" });
+    }
+  }
+);

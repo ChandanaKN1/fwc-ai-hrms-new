@@ -1,7 +1,6 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
-import DashboardCard from "../components/DashboardCard";
 import { getAllJobs } from "../api/api";
 
 export default function CandidateDashboard() {
@@ -10,6 +9,23 @@ export default function CandidateDashboard() {
   const [showJobs, setShowJobs] = useState(false);
   const [resumeFiles, setResumeFiles] = useState({});
   const [candidateData, setCandidateData] = useState({});
+  const [onboardingStatus, setOnboardingStatus] = useState("");
+
+  useEffect(() => {
+    const loadUser = async () => {
+      try {
+        const token = localStorage.getItem("token");
+        if (!token) return;
+        const res = await fetch("http://localhost:5000/api/auth/user", {
+          headers: { Authorization: `Bearer ${token}` },
+        });
+        if (!res.ok) return;
+        const me = await res.json();
+        setOnboardingStatus(me?.onboardingStatus || "");
+      } catch {}
+    };
+    loadUser();
+  }, []);
 
   const handleFindJobs = async () => {
     const { data } = await getAllJobs();
@@ -81,6 +97,12 @@ export default function CandidateDashboard() {
   };
 
   const features = [
+    {
+      title: "Onboarding",
+      description:
+        `Your current onboarding status: ${onboardingStatus || "Unavailable"}`,
+      onClick: () => navigate("/candidate/onboarding"),
+    },
     {
       title: "My Interviews",
       description:

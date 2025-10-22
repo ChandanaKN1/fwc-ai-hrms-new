@@ -29,19 +29,35 @@ router.post("/attendance", protect, authorizeRoles("Employee"), async (req, res)
 /* 📝 Submit Leave Request */
 router.post("/leave", protect, authorizeRoles("Employee"), async (req, res) => {
   try {
-    const { startDate, endDate, reason } = req.body;
+    let { startDate, endDate, reason } = req.body;
     const employeeId = req.user._id;
 
+    if (!startDate || !endDate || !reason) {
+      return res.status(400).json({ message: "startDate, endDate and reason are required" });
+    }
+
+    // Normalize and validate dates
+    const s = new Date(startDate);
+    const e = new Date(endDate);
+    if (Number.isNaN(s.getTime()) || Number.isNaN(e.getTime())) {
+      return res.status(400).json({ message: "Invalid startDate or endDate" });
+    }
+    if (e < s) {
+      return res.status(400).json({ message: "endDate cannot be before startDate" });
+    }
+
+    // Optional: same-day leaves ok; strip time for consistency if needed
     const leave = await LeaveRequest.create({
       employeeId,
-      startDate,
-      endDate,
-      reason,
+      startDate: s,
+      endDate: e,
+      reason: String(reason).trim(),
       status: "Pending",
     });
 
     res.json({ message: "✅ Leave submitted successfully", leave });
   } catch (err) {
+    console.error("Leave submit error:", err);
     res.status(500).json({ message: "Failed to submit leave request" });
   }
 });

@@ -120,6 +120,12 @@ export default function HRDashboard() {
       onClick: () => navigate("/hr/resume-screening"),
     },
     {
+      title: "Onboarding",
+      description:
+        "Manage candidate onboarding: start, track status, or withdraw when needed.",
+      onClick: () => navigate("/hr/onboarding"),
+    },
+    {
       title: "Interviews",
       description:
         "Schedule and manage interviews, monitor slots, and keep track of candidate progress seamlessly.",

@@ -56,7 +56,7 @@ const Chatbot = ({ userRole }) => {
       {/* Chat toggle button */}
       <button
         onClick={toggleChat}
-        className="bg-blue-600 hover:bg-blue-700 text-white rounded-full p-3 shadow-lg flex items-center justify-center"
+        className="bg-[#1d3e8d] hover:bg-[#1d3e8d] text-white rounded-full p-3 shadow-lg flex items-center justify-center"
         aria-label="Toggle chat"
       >
         {isOpen ? (
@@ -73,7 +73,7 @@ const Chatbot = ({ userRole }) => {
       {/* Chat window */}
       {isOpen && (
         <div className="absolute bottom-16 right-0 w-80 sm:w-96 bg-white rounded-lg shadow-xl border border-gray-200 flex flex-col">
-          <div className="bg-blue-600 text-white px-4 py-3 rounded-t-lg flex justify-between items-center">
+          <div className="bg-[#1d3e8d] text-white px-4 py-3 rounded-t-lg flex justify-between items-center">
             <h3 className="font-medium">HRMS Assistant</h3>
             <span className="text-xs bg-green-500 px-2 py-1 rounded-full">
               {userRole === 'admin' ? 'Admin' : userRole === 'hr' ? 'HR' : 'Employee'}
@@ -88,7 +88,7 @@ const Chatbot = ({ userRole }) => {
                 <div 
                   className={`max-w-3/4 px-4 py-2 rounded-lg ${
                     message.sender === 'user' 
-                      ? 'bg-blue-600 text-white rounded-br-none' 
+                      ? 'bg-[#1d3e8d] text-white rounded-br-none' 
                       : message.isError 
                         ? 'bg-red-100 text-red-800 rounded-bl-none' 
                         : 'bg-gray-100 text-gray-800 rounded-bl-none'
@@ -117,12 +117,12 @@ const Chatbot = ({ userRole }) => {
               value={inputValue}
               onChange={(e) => setInputValue(e.target.value)}
               placeholder="Type your message..."
-              className="flex-1 border border-gray-300 rounded-l-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="flex-1 border border-gray-300 rounded-l-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-[#1d3e8d]"
               disabled={isLoading}
             />
             <button
               type="submit"
-              className={`bg-blue-600 hover:bg-blue-700 text-white px-4 rounded-r-lg ${
+              className={`bg-[#1d3e8d] hover:bg-[#1d3e8d] text-white px-4 rounded-r-lg ${
                 isLoading ? 'opacity-50 cursor-not-allowed' : ''
               }`}
               disabled={isLoading}

@@ -13,6 +13,12 @@ const userSchema = new mongoose.Schema(
       default: "Employee",
     },
 
+    onboardingStatus: {
+      type: String,
+      enum: ["Pending", "In Progress", "Completed"],
+      default: "Pending",
+    },
+
     googleId: { type: String, default: null },
   },
   { timestamps: true }
