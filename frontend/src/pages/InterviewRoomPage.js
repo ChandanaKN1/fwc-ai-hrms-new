@@ -86,7 +86,8 @@ const RoomInner = () => {
 
         // Socket.IO
         const token = localStorage.getItem('token');
-        const s = io('http://localhost:5000/interview', {
+        const BASE = process.env.REACT_APP_API_URL || 'http://localhost:5000';
+        const s = io(`${BASE}/interview`, {
           auth: { token, roomId },
           transports: ['websocket'],
         });

@@ -7,8 +7,9 @@ export default function ProtectedRoute({ children }) {
   useEffect(() => {
     const checkAuth = async () => {
       try {
+        const BASE = process.env.REACT_APP_API_URL || "http://localhost:5000";
         // ✅ 1️⃣ Try Google session check first
-        const sessionRes = await fetch("http://localhost:5000/api/auth/user", {
+        const sessionRes = await fetch(`${BASE}/api/auth/user`, {
           credentials: "include",
         });
 
@@ -20,7 +21,7 @@ export default function ProtectedRoute({ children }) {
         // ✅ 2️⃣ Fallback: Check JWT token in localStorage
         const token = localStorage.getItem("token");
         if (token) {
-          const verifyRes = await fetch("http://localhost:5000/api/auth/verify-token", {
+          const verifyRes = await fetch(`${BASE}/api/auth/verify-token`, {
             headers: { Authorization: `Bearer ${token}` },
           });
 

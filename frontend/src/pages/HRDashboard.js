@@ -32,12 +32,13 @@ export default function HRDashboard() {
       try {
         const token = localStorage.getItem("token");
         const headers = { Authorization: `Bearer ${token}` };
+        const BASE = process.env.REACT_APP_API_URL || "http://localhost:5000";
 
         const [attendanceRes, leaveRes, payrollRes, projectRes] = await Promise.all([
-          fetch("http://localhost:5000/api/hr/attendance", { headers }),
-          fetch("http://localhost:5000/api/hr/leave", { headers }),
-          fetch("http://localhost:5000/api/hr/payroll", { headers }),
-          fetch("http://localhost:5000/api/projects", { headers }),
+          fetch(`${BASE}/api/hr/attendance`, { headers }),
+          fetch(`${BASE}/api/hr/leave`, { headers }),
+          fetch(`${BASE}/api/hr/payroll`, { headers }),
+          fetch(`${BASE}/api/projects`, { headers }),
         ]);
 
         const [attendanceData, leaveData, payrollData, projectsData] = await Promise.all([
