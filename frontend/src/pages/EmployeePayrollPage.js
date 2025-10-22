@@ -63,66 +63,80 @@ export default function EmployeePayrollPage() {
   const years = ["2023", "2024", "2025", "2026"];
 
   return (
-    <div className="p-8 pt-16 bg-gray-900 min-h-screen text-white">
-      <h1 className="text-2xl font-bold mb-6">My Payroll</h1>
+    <div className="bg-gray-100 min-h-screen p-8 pt-20 text-gray-800 font-inter">
+      <div className="max-w-4xl mx-auto">
+        <h1 className="text-3xl font-bold mb-6 tracking-tight text-center">
+          My Payroll
+        </h1>
 
-      {/* Filters */}
-      <div className="flex flex-wrap gap-4 mb-6 items-center">
-        <select
-          value={selectedMonth}
-          onChange={(e) => setSelectedMonth(e.target.value)}
-          className="p-2 rounded text-black"
-        >
-          <option value="">Select Month</option>
-          {months.map((m) => (
-            <option key={m}>{m}</option>
-          ))}
-        </select>
+        {/* 🧭 Filters Section */}
+        <div className="bg-white rounded-xl shadow-md p-6 mb-8 flex flex-wrap gap-4 justify-center sm:justify-between items-center">
+          <div className="flex gap-4 flex-wrap">
+            <select
+              value={selectedMonth}
+              onChange={(e) => setSelectedMonth(e.target.value)}
+              className="p-2 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+            >
+              <option value="">Select Month</option>
+              {months.map((m) => (
+                <option key={m}>{m}</option>
+              ))}
+            </select>
 
-        <select
-          value={selectedYear}
-          onChange={(e) => setSelectedYear(e.target.value)}
-          className="p-2 rounded text-black"
-        >
-          <option value="">Select Year</option>
-          {years.map((y) => (
-            <option key={y}>{y}</option>
-          ))}
-        </select>
+            <select
+              value={selectedYear}
+              onChange={(e) => setSelectedYear(e.target.value)}
+              className="p-2 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+            >
+              <option value="">Select Year</option>
+              {years.map((y) => (
+                <option key={y}>{y}</option>
+              ))}
+            </select>
+          </div>
 
-        <button
-          onClick={handleFilter}
-          className="bg-blue-600 hover:bg-blue-700 px-4 py-2 rounded"
-        >
-          Apply Filter
-        </button>
-        <button
-          onClick={clearFilter}
-          className="bg-gray-600 hover:bg-gray-700 px-4 py-2 rounded"
-        >
-          Clear
-        </button>
-      </div>
-
-      {loading ? (
-        <p>Loading...</p>
-      ) : filteredPayrolls.length === 0 ? (
-        <p>No payroll records found.</p>
-      ) : (
-        <div className="space-y-4">
-          {filteredPayrolls.map((p) => (
-            <div key={p._id} className="bg-gray-800 p-4 rounded-lg">
-              <PayrollSlip payroll={p} />
-              <button
-                onClick={() => generatePayslipPDF(p)}
-                className="bg-green-600 hover:bg-green-700 px-4 py-2 rounded text-white mt-2"
-              >
-                Download Payslip (PDF)
-              </button>
-            </div>
-          ))}
+          <div className="flex gap-3">
+            <button
+              onClick={handleFilter}
+              className="bg-[#1E3A8A] hover:bg-[#162c6a] text-white px-4 py-2 rounded-lg font-medium transition shadow-sm hover:shadow-md"
+            >
+              Apply Filter
+            </button>
+            <button
+              onClick={clearFilter}
+              className="border border-gray-400 text-gray-700 hover:bg-gray-200 px-4 py-2 rounded-lg font-medium transition"
+            >
+              Clear
+            </button>
+          </div>
         </div>
-      )}
+
+        {/* 📊 Payroll Display Section */}
+        {loading ? (
+          <p className="text-center text-gray-500">Loading payroll data...</p>
+        ) : filteredPayrolls.length === 0 ? (
+          <p className="text-center text-gray-500">No payroll records found.</p>
+        ) : (
+          <div className="space-y-5">
+            {filteredPayrolls.map((p) => (
+              <div
+                key={p._id}
+                className="bg-white rounded-xl shadow-lg p-6 border border-gray-200"
+              >
+                <PayrollSlip payroll={p} />
+                <div className="text-right mt-4">
+                  <button
+                    onClick={() => generatePayslipPDF(p)}
+                    className="bg-green-600 hover:bg-green-700 text-white px-5 py-2 rounded-lg font-medium transition shadow-sm hover:shadow-md"
+                  >
+                    Download Payslip (PDF)
+                  </button>
+                </div>
+              </div>
+            ))}
+          </div>
+        )}
+      </div>
     </div>
   );
 }

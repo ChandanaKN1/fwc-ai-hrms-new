@@ -33,15 +33,32 @@ export default function EmployeeAttendancePage() {
   };
 
   return (
-    <div className="p-8 pt-16 bg-gray-900 min-h-screen text-white flex flex-col items-center">
-      <h1 className="text-2xl font-bold mb-6">Employee Attendance</h1>
-      <button
-        onClick={handleMarkAttendance}
-        className="bg-green-600 hover:bg-green-700 text-white py-2 px-6 rounded-lg shadow-md"
-      >
-        Mark Attendance
-      </button>
-      {status && <p className="mt-4 text-lg">{status}</p>}
+    <div className="bg-gray-100 min-h-screen flex items-center justify-center p-8 pt-20 text-gray-800 font-inter">
+      <div className="bg-white rounded-xl shadow-lg p-8 w-full max-w-md text-center">
+        <h1 className="text-2xl font-bold mb-2 tracking-tight">
+          Employee Attendance
+        </h1>
+        <p className="text-gray-600 text-sm mb-6">
+          Mark your attendance for today. Attendance can only be marked once per day.
+        </p>
+
+        <button
+          onClick={handleMarkAttendance}
+          className="bg-[#1E3A8A] hover:bg-[#1a3578] text-white px-6 py-2 rounded-lg font-medium transition shadow-sm hover:shadow-lg"
+        >
+          Mark Attendance
+        </button>
+
+        {status && (
+          <p
+            className={`mt-6 text-sm font-medium ${
+              status.startsWith("✅") ? "text-green-600" : "text-red-600"
+            }`}
+          >
+            {status}
+          </p>
+        )}
+      </div>
     </div>
   );
 }

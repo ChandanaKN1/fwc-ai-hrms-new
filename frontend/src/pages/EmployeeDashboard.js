@@ -1,66 +1,60 @@
 import React from "react";
-import DashboardCard from "../components/DashboardCard";
 import { useNavigate } from "react-router-dom";
 
 export default function EmployeeDashboard() {
   const navigate = useNavigate();
+
   const features = [
     {
       title: "Projects",
-      description: "View, manage, and collaborate on assigned projects.",
-      buttonText: "Open Projects",
-      color: "yellow",
-      onClick: () => navigate("/employee/projects"), // ✅ Added navigation
+      description: "Access and track your assigned projects. Stay updated with deadlines and progress.",
+      onClick: () => navigate("/employee/projects"),
     },
     {
       title: "Attendance",
-      description: "Mark attendance and request leave.",
-      buttonText: "Open Attendance",
-      color: "blue",
+      description: "Check your attendance records and mark your daily attendance seamlessly.",
       onClick: () => navigate("/employee/attendance"),
     },
     {
       title: "Payroll",
-      description: "View payslips and salary details.",
-      buttonText: "View Payroll",
-      color: "gray",
+      description: "View and download your latest payslips, allowances, and deductions.",
       onClick: () => navigate("/employee/payroll"),
     },
     {
       title: "Leave Requests",
-      description: "Submit and view your leave requests.",
-      buttonText: "Request Leave",
-      color: "green",
+      description: "Submit new leave requests or track the status of your previous requests.",
       onClick: () => navigate("/employee/leave"),
     },
     {
       title: "Feedback",
-      description: "Share feedback anonymously with HR.",
-      buttonText: "Give Feedback",
-      color: "blue",
+      description: "Share your feedback directly with HR — completely secure and confidential.",
       onClick: () => navigate("/employee/feedback"),
     },
-    // {
-    //   title: "Chatbot",
-    //   description: "Ask FAQs about status, leave, payroll.",
-    //   buttonText: "Open Chatbot",
-    //   color: "green",
-    // },
-    // { title: "Projects", description: "View, manage, and collaborate on assigned projects.", buttonText: "Open Projects", color: "yellow" },
-    // { title: "Attendance", description: "Mark attendance and request leave.", buttonText: "Open Attendance", color: "blue", onClick: () => navigate("/employee/attendance") },
-    // { title: "Payroll", description: "View payslips and salary details.", buttonText: "View Payroll", color: "gray", onClick: () => navigate("/employee/payroll") },
-    // { title: "Leave Requests", description: "Submit and view your leave requests.", buttonText: "Request Leave", color: "green", onClick: () => navigate("/employee/leave") },
-    // { title: "Feedback", description: "Share feedback anonymously with HR.", buttonText: "Give Feedback", color: "blue", onClick: () => navigate("/employee/feedback") },
-    // { title: "Chatbot", description: "Ask FAQs about status, leave, payroll.", buttonText: "Open Chatbot", color: "green" },
   ];
 
   return (
-    <div className="p-8 pt-16 bg-gray-900 min-h-screen text-white">
-      <h1 className="text-2xl font-bold mb-6">Employee Dashboard</h1>
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 items-stretch">
-        {features.map((f, index) => (
-          <DashboardCard key={index} {...f} />
-        ))}
+    <div className="bg-gray-100 min-h-screen p-8 pt-20 text-gray-800 font-inter flex flex-col justify-between">
+      <div>
+        <h1 className="text-3xl font-bold mb-8 tracking-tight text-center">
+          Employee Dashboard
+        </h1>
+
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 max-w-[1300px] mx-auto">
+          {features.map((f, idx) => (
+            <div
+              key={idx}
+              onClick={f.onClick}
+              className="bg-white rounded-xl p-6 shadow hover:shadow-xl transition transform hover:-translate-y-1 cursor-pointer h-[180px] flex flex-col justify-center"
+            >
+              <h3 className="text-lg font-semibold mb-2 text-gray-800 hover:text-indigo-600 transition-colors tracking-tight">
+                {f.title}
+              </h3>
+              <p className="text-sm text-gray-600 leading-relaxed">
+                {f.description}
+              </p>
+            </div>
+          ))}
+        </div>
       </div>
     </div>
   );
