@@ -8,34 +8,21 @@ export default function ProtectedRoute({ children }) {
     const checkAuth = async () => {
       try {
         const BASE = process.env.REACT_APP_API_URL || "http://localhost:5000";
-        // ✅ 1️⃣ Try Google session check first
-        const sessionRes = await fetch(`${BASE}/api/auth/user`, {
-          credentials: "include",
-        });
-
-        if (sessionRes.ok) {
-          setIsAuth(true);
-          return;
-        }
-
-        // ✅ 2️⃣ Fallback: Check JWT token in localStorage
+        // ✅ Prefer JWT token verification
         const token = localStorage.getItem("token");
         if (token) {
           const verifyRes = await fetch(`${BASE}/api/auth/verify-token`, {
             headers: { Authorization: `Bearer ${token}` },
           });
-
           if (verifyRes.ok) {
             const data = await verifyRes.json();
-            // 🔁 Keep user info synced (important after page refresh)
             localStorage.setItem("user", JSON.stringify(data.user));
             localStorage.setItem("role", data.user.role);
             setIsAuth(true);
             return;
           }
         }
-
-        // ❌ If neither session nor token works → not authenticated
+        // ❌ No valid token
         setIsAuth(false);
       } catch (err) {
         console.error("ProtectedRoute auth error:", err);

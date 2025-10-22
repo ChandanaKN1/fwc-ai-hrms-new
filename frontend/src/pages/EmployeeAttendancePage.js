@@ -12,7 +12,8 @@ export default function EmployeeAttendancePage() {
     }
 
     try {
-      const res = await fetch("http://localhost:5000/api/employee/attendance", {
+      const BASE = process.env.REACT_APP_API_URL || "http://localhost:5000";
+      const res = await fetch(`${BASE}/api/employee/attendance`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

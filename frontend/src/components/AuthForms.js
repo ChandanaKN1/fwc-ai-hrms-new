@@ -45,7 +45,8 @@ function AuthForms() {
   };
 
   const handleGoogleLogin = () => {
-    window.location.href = "http://localhost:5000/api/auth/google";
+    const BASE = process.env.REACT_APP_API_URL || "http://localhost:5000";
+    window.location.href = `${BASE}/api/auth/google`;
   };
 
   return (

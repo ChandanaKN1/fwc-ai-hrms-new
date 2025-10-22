@@ -5,7 +5,8 @@ export default function HREmployeeManagementPage() {
 
   const fetchEmployees = async () => {
     const token = localStorage.getItem("token");
-    const res = await fetch("http://localhost:5000/api/hr/employees", {
+    const BASE = process.env.REACT_APP_API_URL || "http://localhost:5000";
+    const res = await fetch(`${BASE}/api/hr/employees`, {
       headers: { Authorization: `Bearer ${token}` },
     });
     const data = await res.json();

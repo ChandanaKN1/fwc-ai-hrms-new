@@ -8,7 +8,8 @@ export default function EmployeeFeedbackPage() {
   const submitFeedback = async () => {
     try {
       const token = localStorage.getItem("token");
-      const res = await fetch("http://localhost:5000/api/employee/feedback", {
+      const BASE = process.env.REACT_APP_API_URL || "http://localhost:5000";
+      const res = await fetch(`${BASE}/api/employee/feedback`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

@@ -7,7 +7,8 @@ export default function EmployeeProjectsPage() {
   const fetchProjects = async () => {
     try {
       const token = localStorage.getItem("token");
-      const res = await fetch("http://localhost:5000/api/projects/employee", {
+      const BASE = process.env.REACT_APP_API_URL || "http://localhost:5000";
+      const res = await fetch(`${BASE}/api/projects/employee`, {
         headers: { Authorization: `Bearer ${token}` },
       });
       if (res.ok) {

@@ -6,7 +6,8 @@ export default function HRFeedbackPage() {
   useEffect(() => {
     const fetchFeedbacks = async () => {
       const token = localStorage.getItem("token");
-      const res = await fetch("http://localhost:5000/api/hr/feedback", {
+      const BASE = process.env.REACT_APP_API_URL || "http://localhost:5000";
+      const res = await fetch(`${BASE}/api/hr/feedback`, {
         headers: { Authorization: `Bearer ${token}` },
       });
       const data = await res.json();

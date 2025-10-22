@@ -6,7 +6,8 @@ export default function HRSalaryStructurePage() {
   useEffect(() => {
     const fetchEmployees = async () => {
       const token = localStorage.getItem("token");
-      const res = await fetch("http://localhost:5000/api/hr/employees", {
+      const BASE = process.env.REACT_APP_API_URL || "http://localhost:5000";
+      const res = await fetch(`${BASE}/api/hr/employees`, {
         headers: { Authorization: `Bearer ${token}` },
       });
       const data = await res.json();
@@ -17,7 +18,8 @@ export default function HRSalaryStructurePage() {
 
   const updateSalary = async (id, base, allowance, deduction) => {
     const token = localStorage.getItem("token");
-    await fetch("http://localhost:5000/api/hr/salary-structure", {
+    const BASE = process.env.REACT_APP_API_URL || "http://localhost:5000";
+    await fetch(`${BASE}/api/hr/salary-structure`, {
       method: "POST",
       headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}` },
       body: JSON.stringify({ employeeId: id, base, allowance, deduction }),

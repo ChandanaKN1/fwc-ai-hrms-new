@@ -7,7 +7,8 @@ export default function HRAttendancePage() {
     const fetchAttendance = async () => {
       try {
         const token = localStorage.getItem("token");
-        const res = await fetch("http://localhost:5000/api/hr/attendance", {
+        const BASE = process.env.REACT_APP_API_URL || "http://localhost:5000";
+        const res = await fetch(`${BASE}/api/hr/attendance`, {
           headers: { Authorization: `Bearer ${token}` },
         });
         const data = await res.json();
