@@ -73,7 +73,8 @@ export default function CandidateDashboard() {
     formData.append("email", data.email);
 
     try {
-      const res = await fetch(`http://localhost:5000/api/jobs/${jobId}/apply`, {
+      const BASE = process.env.REACT_APP_API_URL || "http://localhost:5000";
+      const res = await fetch(`${BASE}/api/jobs/${jobId}/apply`, {
         method: "POST",
         body: formData,
       });
