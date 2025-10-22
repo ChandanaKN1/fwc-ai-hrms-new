@@ -1,9 +1,7 @@
-#!/usr/bin/env bash
+#!/bin/bash
 
-# Update and install system dependencies
-apt-get update
-apt-get install -y portaudio19-dev
-
-# Install Python dependencies
+# Upgrade pip
 pip install --upgrade pip
+
+# Install all requirements
 pip install -r requirements.txt
