@@ -86,6 +86,7 @@ export default function CandidateDashboard() {
       description: "Take mock interviews with AI interviewer and get feedback.",
       buttonText: "Start AI Interview",
       color: "yellow",
+      onClick: () => navigate("/candidate/ai_interview"),
     },
     {
       title: "Discover Jobs",
