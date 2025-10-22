@@ -7,6 +7,7 @@ from email.message import EmailMessage
 from sentence_transformers import SentenceTransformer, util
 from dotenv import load_dotenv
 import spacy
+from flask_cors import CORS
 
 # ---------------- Load Environment Variables ----------------
 load_dotenv()
@@ -15,19 +16,19 @@ APP_PASSWORD = os.getenv("APP_PASSWORD")
 
 # ---------------- Initialize Flask + NLP + Model ----------------
 app = Flask(__name__)
+CORS(app, origins=["https://fwc-ai-hrms-new.vercel.app"])  # Allow only your frontend origin
+
 model = SentenceTransformer('all-MiniLM-L6-v2')
 nlp = spacy.load("en_core_web_sm")
 
 # ---------------- Helper Functions ----------------
 def to_ascii(s):
-    """Convert any string to pure ASCII, removing non-ASCII characters."""
     if not s:
         return ""
-    s = s.replace('\xa0', ' ')  # replace non-breaking space
+    s = s.replace('\xa0', ' ')
     return unicodedata.normalize('NFKD', s).encode('ascii', 'ignore').decode('ascii')
 
 def extract_text(file_storage):
-    """Extract text from PDF/DOCX/TXT resume and return ASCII-safe text."""
     filename = to_ascii(file_storage.filename.lower())
     file_bytes = file_storage.read()
     text = ""
@@ -52,18 +53,15 @@ def extract_text(file_storage):
     return to_ascii(text).strip()
 
 def extract_email(text):
-    """Extract a valid email from text, ASCII-safe."""
     if not text:
         return None
 
-    # Normalize text
     text = text.replace("\n", " ").replace("\r", " ")
     text = text.replace("[at]", "@").replace("(at)", "@")
     text = text.replace("[dot]", ".").replace("(dot)", ".").lower()
     text = re.sub(r"\s+", " ", text)
     text = to_ascii(text)
 
-    # spaCy detection
     doc = nlp(text)
     for token in doc:
         if token.like_email:
@@ -72,7 +70,6 @@ def extract_email(text):
                 print(f"Found email via spaCy: {email}")
                 return email
 
-    # Regex fallback
     pattern = re.compile(r"([a-zA-Z0-9_.+\-]+@[a-zA-Z0-9\-]+\.[a-zA-Z0-9.\-]+)", re.IGNORECASE)
     matches = re.findall(pattern, text)
     for email in matches:
@@ -85,7 +82,6 @@ def extract_email(text):
     return None
 
 def send_email(to_email, name):
-    """Send ASCII-safe email using EmailMessage."""
     if not to_email or "@" not in to_email:
         print(f"Invalid email for {name}, skipping.")
         return
@@ -223,5 +219,6 @@ def api_screen_resumes():
 
 # ---------------- Run App ----------------
 if __name__ == "__main__":
-    app.run(debug=True, port=5001)
-
+    import os
+    port = int(os.environ.get("PORT", 5000))
+    app.run(host="0.0.0.0", port=port)
