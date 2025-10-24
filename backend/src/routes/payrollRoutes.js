@@ -5,7 +5,7 @@ import Payroll from "../models/Payroll.js";
 
 const router = express.Router();
 
-/* ✅ Fetch all payroll records (HR/Admin) */
+/*  Fetch all payroll records (HR/Admin) */
 router.get("/", protect, authorizeRoles("HR", "Admin"), async (req, res) => {
   try {
     const payrolls = await Payroll.find()
@@ -19,13 +19,13 @@ router.get("/", protect, authorizeRoles("HR", "Admin"), async (req, res) => {
   }
 });
 
-/* ✅ Generate payroll dynamically */
+/* Generate payroll dynamically */
 router.post("/generate", protect, authorizeRoles("HR", "Admin"), async (req, res) => {
   
   try {
     let { month, baseSalary, allowance, deduction } = req.body;
 
-    // 🧭 Validation
+    //  Validation
     if (!month || typeof month !== "string" || month.trim().length === 0) {
       return res.status(400).json({ message: "Month is required" });
     }
@@ -76,7 +76,7 @@ router.post("/generate", protect, authorizeRoles("HR", "Admin"), async (req, res
   }
 });
 
-/* ✅ Release payroll */
+/*  Release payroll */
 router.patch("/release", protect, authorizeRoles("HR", "Admin"), async (req, res) => {
   try {
     await Payroll.updateMany({}, { status: "Released" });
@@ -87,7 +87,7 @@ router.patch("/release", protect, authorizeRoles("HR", "Admin"), async (req, res
   }
 });
 
-/* ✅ Employee-specific payroll */
+/* Employee-specific payroll */
 router.get("/employee", protect, authorizeRoles("Employee"), async (req, res) => {
   try {
     const employeeId = req.user._id;

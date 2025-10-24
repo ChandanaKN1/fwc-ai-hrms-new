@@ -8,7 +8,7 @@ import Feedback from "../models/Feedback.js";
 
 const router = express.Router();
 
-/* 🕒 Get All Attendance - HR */
+/* Get All Attendance - HR */
 router.get("/attendance", protect, authorizeRoles("HR", "Admin"), async (req, res) => {
   try {
     const employees = await User.find({ role: "Employee" }).select("name email");
@@ -34,7 +34,7 @@ router.get("/attendance", protect, authorizeRoles("HR", "Admin"), async (req, re
   }
 });
 
-/* 📝 Get All Leave Requests - HR */
+/* Get All Leave Requests - HR */
 router.get("/leave", protect, authorizeRoles("HR", "Admin"), async (req, res) => {
   try {
     const requests = await LeaveRequest.find()
@@ -48,7 +48,7 @@ router.get("/leave", protect, authorizeRoles("HR", "Admin"), async (req, res) =>
   }
 });
 
-/* ✍️ Approve / Reject Leave Request - HR */
+/* Approve / Reject Leave Request - HR */
 router.patch("/leave/:id", protect, authorizeRoles("HR", "Admin"), async (req, res) => {
   try {
     const { status } = req.body;
@@ -74,7 +74,7 @@ router.patch("/leave/:id", protect, authorizeRoles("HR", "Admin"), async (req, r
   }
 });
 
-/* 👩‍💼 Employee Fetch for HR (Simplified) */
+/* Employee Fetch for HR (Simplified) */
 router.get("/employees", protect, authorizeRoles("HR", "Admin"), async (req, res) => {
   try {
     const employees = await User.find({ role: "Employee" }).select("name email");
@@ -85,7 +85,7 @@ router.get("/employees", protect, authorizeRoles("HR", "Admin"), async (req, res
   }
 });
 
-/* 💰 Payroll - Create (Single Employee) */
+/* Payroll - Create (Single Employee) */
 router.post("/payroll", protect, authorizeRoles("HR", "Admin"), async (req, res) => {
   try {
     const { employeeId, baseSalary, bonus, deductions, month } = req.body;
@@ -107,17 +107,17 @@ router.post("/payroll", protect, authorizeRoles("HR", "Admin"), async (req, res)
   }
 });
 
-/* ✅ Payroll - Generate (Bulk for all employees) */
+/* Payroll - Generate (Bulk for all employees) */
 router.post("/payroll/generate", protect, authorizeRoles("HR", "Admin"), async (req, res) => {
   try {
     let { month, baseSalary, allowance, deduction } = req.body;
 
-    // ✅ Input validation
+    // Input validation
     if (!month) {
       return res.status(400).json({ message: "Month is required" });
     }
 
-    // ✅ Convert to proper numbers
+    // Convert to proper numbers
     baseSalary = Number(baseSalary);
     allowance = Number(allowance);
     deduction = Number(deduction);
@@ -126,13 +126,13 @@ router.post("/payroll/generate", protect, authorizeRoles("HR", "Admin"), async (
       return res.status(400).json({ message: "Invalid salary inputs" });
     }
 
-    // ✅ Check if payroll already exists for this month
+    //  Check if payroll already exists for this month
     const existing = await Payroll.findOne({ month });
     if (existing) {
       return res.status(400).json({ message: `Payroll for ${month} already exists` });
     }
 
-    // ✅ Get all employees
+    //  Get all employees
     const employees = await User.find({ role: "Employee" });
     if (employees.length === 0) {
       return res.status(400).json({ message: "No employees found" });
@@ -140,7 +140,7 @@ router.post("/payroll/generate", protect, authorizeRoles("HR", "Admin"), async (
 
     const generatedPayrolls = [];
 
-    // ✅ Generate payrolls properly
+    //  Generate payrolls properly
     for (const emp of employees) {
       const finalBase = baseSalary;
       const finalBonus = allowance;
@@ -167,7 +167,7 @@ router.post("/payroll/generate", protect, authorizeRoles("HR", "Admin"), async (
   }
 });
 
-/* 💰 Payroll - Get All */
+/* Payroll - Get All */
 router.get("/payroll", protect, authorizeRoles("HR", "Admin"), async (req, res) => {
   try {
     const records = await Payroll.find().populate("employeeId", "name email");
@@ -178,7 +178,7 @@ router.get("/payroll", protect, authorizeRoles("HR", "Admin"), async (req, res) 
   }
 });
 
-/* 🆕 📩 Get All Feedback (HR) */
+/*  Get All Feedback (HR) */
 router.get("/feedback", protect, authorizeRoles("HR", "Admin"), async (req, res) => {
   try {
     const feedbacks = await Feedback.find()
@@ -197,7 +197,7 @@ export default router;
 /* =========================
    Onboarding Management
    ========================= */
-// 📋 Fetch candidates for onboarding
+//  Fetch candidates for onboarding
 router.get(
   "/onboarding",
   protect,
@@ -215,7 +215,7 @@ router.get(
   }
 );
 
-// 🚀 Start onboarding for a candidate
+// Start onboarding for a candidate
 router.post(
   "/onboarding/:id/trigger",
   protect,
@@ -237,7 +237,7 @@ router.post(
   }
 );
 
-// ⏪ Withdraw onboarding back to Pending
+// Withdraw onboarding back to Pending
 router.post(
   "/onboarding/:id/withdraw",
   protect,

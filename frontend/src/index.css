@@ -5,7 +5,7 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
 
 /* =========================
-   🌟 Global Reset & Typography
+    Global Reset & Typography
 ========================= */
 * {
   margin: 0;
@@ -30,7 +30,7 @@ body.dark {
 }
 
 /* =========================
-   🌈 Card Component
+   Card Component
 ========================= */
 .card {
   background: #ffffff;
@@ -62,7 +62,7 @@ body.dark {
 }
 
 /* =========================
-   🌿 Button Style
+   Button Style
 ========================= */
 button {
   transition: all 0.3s ease;
@@ -106,7 +106,7 @@ button:hover {
 }
 
 /* =========================
-   ✨ Animations & Transitions
+    Animations & Transitions
 ========================= */
 .animate-fade-in {
   animation: fadeIn 0.5s ease-in-out;
@@ -141,7 +141,7 @@ button:hover {
 }
 
 /* =========================
-   🖱️ Scrollbar
+    Scrollbar
 ========================= */
 ::-webkit-scrollbar {
   width: 8px;
@@ -161,7 +161,7 @@ button:hover {
 }
 
 /* =========================
-   🧭 Navbar Hover
+    Navbar Hover
 ========================= */
 nav ul li {
   transition: color 0.2s ease;

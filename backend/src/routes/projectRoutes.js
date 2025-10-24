@@ -4,7 +4,7 @@ import Project from "../models/Project.js";
 
 const router = express.Router();
 
-/* 🆕 HR - Create New Project */
+/* HR - Create New Project */
 router.post("/", protect, authorizeRoles("HR", "Admin"), async (req, res) => {
   try {
     const { title, description, deadline } = req.body;
@@ -27,7 +27,7 @@ router.post("/", protect, authorizeRoles("HR", "Admin"), async (req, res) => {
   }
 });
 
-/* 🟡 HR - Get All Projects (Past + Active) */
+/* HR - Get All Projects (Past + Active) */
 router.get("/", protect, authorizeRoles("HR", "Admin"), async (req, res) => {
   try {
     const projects = await Project.find().sort({ createdAt: -1 });
@@ -38,7 +38,7 @@ router.get("/", protect, authorizeRoles("HR", "Admin"), async (req, res) => {
   }
 });
 
-/* 📝 HR - Update Project Status (Active / Completed) */
+/* HR - Update Project Status (Active / Completed) */
 router.patch("/:id", protect, authorizeRoles("HR", "Admin"), async (req, res) => {
   try {
     const { status } = req.body;
@@ -63,7 +63,7 @@ router.patch("/:id", protect, authorizeRoles("HR", "Admin"), async (req, res) =>
   }
 });
 
-/* 👩 Employee - Get All Projects (Only View) */
+/* Employee - Get All Projects (Only View) */
 router.get("/employee", protect, authorizeRoles("Employee"), async (req, res) => {
   try {
     const projects = await Project.find().sort({ createdAt: -1 });

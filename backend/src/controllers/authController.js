@@ -3,7 +3,7 @@ import jwt from "jsonwebtoken";
 
 const generateToken = (id) => jwt.sign({ id }, process.env.JWT_SECRET, { expiresIn: "7d" });
 
-// 🟢 Register
+//  Register
 export const registerUser = async (req, res) => {
   try {
     const { name, email, password, role, department, designation, baseSalary } = req.body;
@@ -15,7 +15,7 @@ export const registerUser = async (req, res) => {
 
     const userData = { name, email, password, role };
 
-    // ✅ Employee-specific fields
+    //Employee-specific fields
     if (role === "Employee") {
       userData.department = department || "Not Assigned";
       userData.designation = designation || "Not Assigned";
@@ -40,7 +40,7 @@ export const registerUser = async (req, res) => {
 };
 
 
-// 🟢 Login
+// Login
 export const loginUser = async (req, res) => {
   try {
     const { email, password } = req.body;
@@ -63,7 +63,7 @@ export const loginUser = async (req, res) => {
   }
 };
 
-// 🟢 Verify token for local login
+//Verify token for local login
 export const verifyToken = async (req, res) => {
   try {
     const authHeader = req.headers.authorization;
@@ -80,7 +80,7 @@ export const verifyToken = async (req, res) => {
   }
 };
 
-// 🟢 Google Auth Success
+// Google Auth Success
 export const googleAuthSuccess = (req, res) => {
   if (!req.user) return res.status(400).json({ message: "No user data" });
   const token = generateToken(req.user._id);

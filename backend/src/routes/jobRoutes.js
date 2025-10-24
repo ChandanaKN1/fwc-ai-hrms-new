@@ -8,7 +8,7 @@ import { protect, authorizeRoles } from "../middlewares/authMiddleware.js";
 
 const router = express.Router();
 
-// 📂 Multer storage for resumes
+// Multer storage for resumes
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
     const uploadDir = "uploads/resumes";
@@ -24,7 +24,7 @@ const storage = multer.diskStorage({
 });
 const upload = multer({ storage });
 
-// ✅ HR/Admin can add jobs
+// HR/Admin can add jobs
 router.post("/", protect, authorizeRoles("HR", "Admin"), async (req, res) => {
   try {
     const { title, description, location } = req.body;
@@ -40,7 +40,7 @@ router.post("/", protect, authorizeRoles("HR", "Admin"), async (req, res) => {
   }
 });
 
-// ✅ Public - View jobs
+//  Public - View jobs
 router.get("/", async (req, res) => {
   try {
     const jobs = await Job.find().sort({ createdAt: -1 });
@@ -50,7 +50,7 @@ router.get("/", async (req, res) => {
   }
 });
 
-// ✅ Candidate can upload resume + name + email
+// Candidate can upload resume + name + email
 router.post("/:id/apply", upload.single("resume"), async (req, res) => {
   try {
     if (!req.file) return res.status(400).json({ message: "No file uploaded" });
@@ -73,7 +73,7 @@ router.post("/:id/apply", upload.single("resume"), async (req, res) => {
   }
 });
 
-// ✅ HR can fetch all applications for a job
+//  HR can fetch all applications for a job
 router.get("/:id/applications", protect, authorizeRoles("HR", "Admin"), async (req, res) => {
   try {
     const applications = await JobApplication.find({ jobId: req.params.id }).sort({ createdAt: -1 });

@@ -1,7 +1,7 @@
 import jwt from "jsonwebtoken";
 import User from "../models/User.js";
 
-/* ✅ Verify JWT and attach user to req */
+/* Verify JWT and attach user to req */
 export const protect = async (req, res, next) => {
   let token = null;
 
@@ -27,7 +27,7 @@ export const protect = async (req, res, next) => {
   }
 };
 
-/* ✅ Check allowed roles */
+/*  Check allowed roles */
 export const authorizeRoles = (...roles) => {
   return (req, res, next) => {
     if (!roles.includes(req.user.role)) {

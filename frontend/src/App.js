@@ -1,7 +1,7 @@
 import React from "react";
 import { BrowserRouter as Router, Routes, Route, useLocation } from "react-router-dom";
 import NavBar from "./components/NavBar";
-import Footer from "./components/Footer";  // ✅ Added Footer
+import Footer from "./components/Footer";  // Added Footer
 
 import AuthForms from "./components/AuthForms";
 import DashboardRedirect from "./pages/DashboardRedirect";
@@ -19,7 +19,7 @@ import ViewApplications from "./pages/ViewApplications";
 import EmployeeAttendancePage from "./pages/EmployeeAttendancePage";
 import HRAttendancePage from "./pages/HRAttendancePage";
 
-// 🆕 New Pages
+//  New Pages
 import EmployeePayrollPage from "./pages/EmployeePayrollPage";
 import EmployeeLeavePage from "./pages/EmployeeLeavePage";
 import EmployeeFeedbackPage from "./pages/EmployeeFeedbackPage";
@@ -28,7 +28,7 @@ import HRFeedbackPage from "./pages/HRFeedbackPage";
 import HRLeaveRequestsPage from "./pages/HRLeaveRequestsPage";
 import HRPayrollPage from "./pages/HRPayrollPage";
 
-// 🆕 Project Management Pages
+//  Project Management Pages
 import HRProjectsPage from "./pages/HRProjectsPage";
 import EmployeeProjectsPage from "./pages/EmployeeProjectsPage";
 import ResumeScreeningPage from "./pages/ResumeScreeningPage";

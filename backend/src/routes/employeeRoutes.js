@@ -7,7 +7,7 @@ import Payroll from "../models/Payroll.js"; // ✅ Added
 
 const router = express.Router();
 
-/* 🕒 Mark Attendance */
+/* Mark Attendance */
 router.post("/attendance", protect, authorizeRoles("Employee"), async (req, res) => {
   try {
     const employeeId = req.user._id;
@@ -26,7 +26,7 @@ router.post("/attendance", protect, authorizeRoles("Employee"), async (req, res)
   }
 });
 
-/* 📝 Submit Leave Request */
+/* Submit Leave Request */
 router.post("/leave", protect, authorizeRoles("Employee"), async (req, res) => {
   try {
     let { startDate, endDate, reason } = req.body;
@@ -62,7 +62,7 @@ router.post("/leave", protect, authorizeRoles("Employee"), async (req, res) => {
   }
 });
 
-/* 📊 Get Leave History for Employee */
+/*  Get Leave History for Employee */
 router.get("/leave", protect, authorizeRoles("Employee"), async (req, res) => {
   try {
     const employeeId = req.user._id;
@@ -73,7 +73,7 @@ router.get("/leave", protect, authorizeRoles("Employee"), async (req, res) => {
   }
 });
 
-/* 💬 Submit Feedback */
+/*  Submit Feedback */
 router.post("/feedback", protect, authorizeRoles("Employee"), async (req, res) => {
   try {
     const { message, rating } = req.body;
@@ -86,7 +86,7 @@ router.post("/feedback", protect, authorizeRoles("Employee"), async (req, res) =
   }
 });
 
-/* 🧾 Get Payroll for Logged-in Employee ✅ */
+/* Get Payroll for Logged-in Employee  */
 router.get("/payroll", protect, authorizeRoles("Employee"), async (req, res) => {
   try {
     const employeeId = req.user._id;
