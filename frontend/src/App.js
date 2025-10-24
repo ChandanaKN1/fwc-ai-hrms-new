@@ -41,13 +41,13 @@ import CandidateOnboardingPage from "./pages/CandidateOnboardingPage";
 
 function LayoutWrapper({ children }) {
   const location = useLocation();
-  const hideNavAndFooterRoutes = ["/", "/register"]; // 👈 No NavBar or Footer on Login & Register
+  const hideNavAndFooterRoutes = ["/", "/register"]; //  No NavBar or Footer on Login & Register
 
   return (
     <>
       {!hideNavAndFooterRoutes.includes(location.pathname) && <NavBar />}
       {children}
-      {!hideNavAndFooterRoutes.includes(location.pathname) && <Footer />} {/* ✅ Footer added here */}
+      {!hideNavAndFooterRoutes.includes(location.pathname) && <Footer />} {/*  Footer added here */}
     </>
   );
 }
